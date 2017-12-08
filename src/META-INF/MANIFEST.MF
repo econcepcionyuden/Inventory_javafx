@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: jfoenix.jar controlsfx-8.40.12.jar freemarker-2.3.23.jar i
+ de-plugin-templates-2.7.1.jar intellij-plugin-2.6.1.jar javax.json-1.
+ 0.4.jar mysql-connector-java-5.1.10.jar
+Main-Class: App
+

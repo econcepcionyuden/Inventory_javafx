@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="758.0" style="-fx-background-color: #85C1E9;" stylesheets="@../Scenes/style.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.SaleController">
+    <children>
+        <VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
+        <Separator layoutY="14.0" prefHeight="3.0" prefWidth="751.0" />
+        <Separator layoutX="206.0" layoutY="14.0" orientation="VERTICAL" prefHeight="476.0" prefWidth="7.0" />
+        <TableView fx:id="saleTable" editable="true" layoutX="218.0" layoutY="121.0" prefHeight="307.0" prefWidth="520.0" tableMenuButtonVisible="true">
+            <columns>
+                <TableColumn fx:id="saleIdColumn" prefWidth="57.0" text="Id" />
+                <TableColumn fx:id="transactionDateColumn" prefWidth="84.0" text="Date" />
+                <TableColumn fx:id="sellingPriceColumn" minWidth="0.0" prefWidth="188.0" text="Selling Price" />
+                <TableColumn fx:id="quantityColumn" prefWidth="207.0" text="Quantity" />
+            </columns>
+        </TableView>
+        <Label layoutX="8.0" layoutY="43.0" prefHeight="16.0" prefWidth="54.0" text="Sale ID" />
+        <ChoiceBox fx:id="clientId" layoutX="105.0" layoutY="229.0" prefHeight="26.0" prefWidth="96.0" />
+      <JFXTextField fx:id="insertSaleId" layoutX="100.0" layoutY="25.0" prefHeight="26.0" prefWidth="96.0" />
+      <JFXTextField fx:id="sellingPrice" layoutX="105.0" layoutY="123.0" prefHeight="26.0" prefWidth="92.0" />
+      <JFXTextField fx:id="quantity" layoutX="104.0" layoutY="173.0" prefHeight="26.0" prefWidth="96.0" />
+      <JFXButton fx:id="sellProductBtn" layoutX="102.0" layoutY="286.0" onAction="#sell" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Sell Product" textFill="WHITE" />
+      <JFXButton fx:id="backBtn2" layoutX="8.0" layoutY="435.0" onAction="#backAction2" prefHeight="30.0" prefWidth="192.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Back " textFill="#fcfafa" />
+      <ChoiceBox fx:id="productId" layoutX="103.0" layoutY="85.0" prefHeight="26.0" prefWidth="96.0" />
+      <JFXButton fx:id="refresh" layoutX="219.0" layoutY="437.0" onAction="#searchSales" prefHeight="28.0" prefWidth="160.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Refresh" textFill="#fcf9f9" />
+      <JFXButton fx:id="reset" layoutX="7.0" layoutY="286.0" onAction="#fieldsClear" prefHeight="28.0" prefWidth="86.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Reset" textFill="#f5f0f0" />
+      <JFXButton fx:id="searchBtn" layoutX="649.0" layoutY="79.0" onAction="#searchSale" prefHeight="28.0" prefWidth="88.0" style="-fx-background-color: #3498DB; -fx-border-color: #fffdfd;" text="Search" textFill="WHITE" />
+      <Label layoutX="219.0" layoutY="85.0" text="Search By :" />
+      <ChoiceBox fx:id="searchChoice" layoutX="307.0" layoutY="80.0" prefWidth="150.0" />
+      <TextField fx:id="searchField" layoutX="467.0" layoutY="80.0" />
+      <Label layoutX="5.0" layoutY="90.0" text="Product ID" />
+      <Label layoutX="6.0" layoutY="132.0" text="Selling Price" />
+      <Label layoutX="7.0" layoutY="185.0" prefHeight="16.0" prefWidth="60.0" text="Quantity" />
+      <Label layoutX="7.0" layoutY="236.0" text="Client ID" />
+    </children>
+</AnchorPane>

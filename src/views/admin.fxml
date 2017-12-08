@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="607.0" prefWidth="715.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AdminController">
+   <children>
+      <Separator prefHeight="141.0" prefWidth="715.0" />
+      <Separator orientation="VERTICAL" prefHeight="493.0" prefWidth="263.0" />
+      <Label alignment="CENTER" prefHeight="69.0" prefWidth="131.0" style="-fx-border-color: #BFC9CA; -fx-background-color: #3498DB; -fx-text-fill: #FDFEFE;" text="D A S H B O A R D" />
+      <ImageView fitHeight="38.0" fitWidth="61.0" layoutX="556.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/654853-user-men-2-512.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="600.0" layoutY="1.0" prefHeight="38.0" prefWidth="78.0" text="A D M I N" textFill="#f5f3f3" />
+      <JFXButton fx:id="logoutButton" buttonType="RAISED" layoutX="601.0" layoutY="36.0" onAction="#handleNavigation" prefHeight="28.0" prefWidth="68.0" style="-fx-border-color: #FDFEFE;" text="Logout" textFill="#fcfafa" />
+      <JFXButton fx:id="productsBtn" layoutY="71.0" onAction="#handleNavigation" prefHeight="76.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="    PRODUCTS" textFill="#f8f6f6" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="7.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/production-icon-19.png" />
+         </image>
+      </ImageView>
+      <JFXButton fx:id="salesBtn" layoutY="147.0" onAction="#handleNavigation" prefHeight="76.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="  SALES" textFill="#f8f6f6" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="12.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/Business_Office_Solid_income_sales_increase_profit-512.png" />
+         </image>
+      </ImageView>
+      <JFXButton fx:id="purchasesBtn" layoutY="223.0" onAction="#handleNavigation" prefHeight="76.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="    PURCHASES" textFill="#f8f6f6" />
+      <ImageView fitHeight="36.0" fitWidth="24.0" layoutX="11.0" layoutY="252.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/shopping_cart.png" />
+         </image>
+      </ImageView>
+      <JFXButton fx:id="usersBtn" layoutY="298.0" onAction="#handleNavigation" prefHeight="76.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text=" USERS" textFill="#f8f6f6" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="8.0" layoutY="323.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/user-new-480.png" />
+         </image>
+      </ImageView>
+      <JFXButton fx:id="reportsBtn" layoutY="374.0" onAction="#handleNavigation" prefHeight="77.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="   REPORTS" textFill="#f8f6f6" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/All_reports.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="173.0" layoutY="257.0" style="-fx-font-size: 20;" text="USERS">
+         <effect>
+            <Reflection />
+         </effect></Label>
+      <Label layoutX="285.0" layoutY="256.0" style="-fx-font-style: Aclonica; -fx-font-size: 20;" text="PRODUCTS">
+         <effect>
+            <Reflection />
+         </effect></Label>
+      <Label layoutX="434.0" layoutY="256.0" style="-fx-font-size: 20;" text="SALES">
+         <effect>
+            <Reflection />
+         </effect></Label>
+      <Label layoutX="543.0" layoutY="257.0" style="-fx-font-size: 20;" text="PURCHASES">
+         <effect>
+            <Reflection />
+         </effect></Label>
+      <TextField fx:id="productCount" layoutX="300.0" layoutY="190.0" prefHeight="14.0" prefWidth="56.0" style="-fx-background-color: #85C1E9; -fx-font-size: 20; -fx-font-style: Allerta Stencil;">
+         <effect>
+            <DropShadow />
+         </effect></TextField>
+      <TextField fx:id="saleCount" layoutX="433.0" layoutY="190.0" prefHeight="16.0" prefWidth="56.0" style="-fx-background-color: #85C1E9; -fx-font-size: 20; -fx-font-style: Allerta Stencil;">
+         <effect>
+            <DropShadow />
+         </effect></TextField>
+      <TextField fx:id="purchaseCount" layoutX="580.0" layoutY="190.0" prefHeight="28.0" prefWidth="56.0" style="-fx-background-color: #85C1E9; -fx-font-size: 20; -fx-font-style: Allerta Stencil;">
+         <effect>
+            <DropShadow />
+         </effect></TextField>
+      <TextField fx:id="userCount" layoutX="177.0" layoutY="190.0" prefHeight="28.0" prefWidth="56.0" style="-fx-background-color: #85C1E9; -fx-font-size: 20; -fx-font-style: Allerta Stencil;">
+         <effect>
+            <DropShadow />
+         </effect></TextField>
+      <JFXButton fx:id="vendorsBtn" layoutY="451.0" onAction="#handleNavigation" prefHeight="77.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="  VENDORS" textFill="#f8f6f6" />
+      <ImageView fitHeight="30.0" fitWidth="38.0" layoutX="3.0" layoutY="474.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/vendors.png" />
+         </image>
+      </ImageView>
+      <JFXButton fx:id="clientsBtn" layoutY="528.0" onAction="#handleNavigation" prefHeight="77.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="  CLIENTS" textFill="#f8f6f6" />
+      <ImageView fitHeight="26.0" fitWidth="23.0" layoutX="9.0" layoutY="554.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/CLIENTS.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
