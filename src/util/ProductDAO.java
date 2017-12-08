@@ -222,9 +222,9 @@ public class ProductDAO {
     }
 
 
-    public static void insertProduct(String id, String title, String type, String description, String unit_price, String quantity, String status) throws SQLException, ClassNotFoundException {
+    public static void insertProduct(String id, String title, String type, String description, String unit_price, String quantity, String status,String reorder,String surplus) throws SQLException, ClassNotFoundException {
 
-        String updateStmt = "INSERT INTO product(id,title, type, description, unit_price, quantity, status) VALUES('" + id + "','" + title + "', '" + type + "','" + description + "', '" + unit_price + "', '" + quantity + "', '" + status + "')";
+        String updateStmt = "INSERT INTO product(id,title, type, description, unit_price, quantity, status,reorder_point,surplus_point) VALUES('" + id + "','" + title + "', '" + type + "','" + description + "', '" + unit_price + "', '" + quantity + "', '" + status + "','" + reorder + "','" + surplus + "')";
         try {
             DBUtil.dbExecuteUpdate(updateStmt);
         } catch (SQLException e) {

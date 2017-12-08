@@ -27,7 +27,7 @@ import java.util.List;
 public class SaleController {
 
     ObservableList<String> clientList = FXCollections.observableArrayList("","C001", "C002", "C003");
-    ObservableList<String> productList = FXCollections.observableArrayList("","G001", "G002", "G003", "G004");
+    ObservableList<String> productList = FXCollections.observableArrayList("","G001", "G002", "G003", "G004","G005");
     ObservableList<String> criteriaList = FXCollections.observableArrayList("", "Date", "ID");
 
     @FXML

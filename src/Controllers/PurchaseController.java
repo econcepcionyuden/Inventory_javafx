@@ -28,7 +28,7 @@ import java.time.format.DateTimeFormatter;
 public class PurchaseController {
 
     ObservableList<String> vendorList = FXCollections.observableArrayList("", "V001", "V002", "V003");
-    ObservableList<String> productList = FXCollections.observableArrayList("", "G001", "G002", "G003", "G004");
+    ObservableList<String> productList = FXCollections.observableArrayList("", "G001", "G002", "G003", "G004", "G005");
     ObservableList<String> criteriaList = FXCollections.observableArrayList("", "Date", "ID");
 
     @FXML
@@ -130,7 +130,6 @@ public class PurchaseController {
 
 
     }
-
 
 
     //Search all purchases

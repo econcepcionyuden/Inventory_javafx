@@ -47,6 +47,10 @@ public class ProductController {
     @FXML
     private TextField unitPrice;
     @FXML
+    private TextField reOrderPoint;
+    @FXML
+    private TextField surplusPoint;
+    @FXML
     private ChoiceBox<String> type;
     @FXML
     private ChoiceBox<String> newStatus;
@@ -231,7 +235,7 @@ public class ProductController {
     private void insertProduct(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         String status = "In stock";
         try {
-            ProductDAO.insertProduct(insertProductId.getText(), title.getText(), type.getValue().toString(), description.getText(), unitPrice.getText(), quantity.getText(),status);
+            ProductDAO.insertProduct(insertProductId.getText(), title.getText(), type.getValue().toString(), description.getText(), unitPrice.getText(), quantity.getText(),status,reOrderPoint.getText(),surplusPoint.getText());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Product add");
             alert.setHeaderText("Success message");
