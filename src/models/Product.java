@@ -14,6 +14,8 @@ public class Product {
     private StringProperty saleId;
     private StringProperty purchaseId;
     private StringProperty productStatus;
+    private StringProperty reOrderPoint;
+    private StringProperty surplusPoint;
 
     //Constructor
     public Product() {
@@ -26,6 +28,32 @@ public class Product {
         this.saleId = new SimpleStringProperty();
         this.purchaseId = new SimpleStringProperty();
         this.productStatus = new SimpleStringProperty();
+        this.reOrderPoint = new SimpleStringProperty();
+        this.surplusPoint = new SimpleStringProperty();
+    }
+
+    public String getReOrderPoint() {
+        return reOrderPoint.get();
+    }
+
+    public StringProperty reOrderPointProperty() {
+        return reOrderPoint;
+    }
+
+    public void setReOrderPoint(String reOrderPoint) {
+        this.reOrderPoint.set(reOrderPoint);
+    }
+
+    public String getSurplusPoint() {
+        return surplusPoint.get();
+    }
+
+    public StringProperty surplusPointProperty() {
+        return surplusPoint;
+    }
+
+    public void setSurplusPoint(String surplusPoint) {
+        this.surplusPoint.set(surplusPoint);
     }
 
     public String getProductStatus() {

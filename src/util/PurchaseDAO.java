@@ -2,6 +2,7 @@ package util;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import models.Product;
 import models.Purchase;
 import models.Sale;
 
@@ -115,6 +116,39 @@ public class PurchaseDAO {
             throw e;
         }
     }
+
+
+    public static ObservableList<Purchase> totalPurchaseAmounts() throws SQLException, ClassNotFoundException {
+
+        String selectStmt = "select * from purchase";
+        try {
+            ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
+            ObservableList<Purchase> purchaseList = getPurchasesList(rsCount);
+            return purchaseList;
+
+        } catch (SQLException e) {
+            System.out.print("Error occurred: " + e);
+            throw e;
+        }
+    }
+
+    private static ObservableList<Purchase> getPurchasesList(ResultSet rs) throws SQLException, ClassNotFoundException {
+
+        ObservableList<Purchase> purchaseList = FXCollections.observableArrayList();
+        while (rs.next()) {
+            Purchase purchase = new Purchase();
+            purchase.setPurchaseId(rs.getString("id"));
+            purchase.setTransaction_date(rs.getString("transaction_date"));
+            purchase.setProductId(rs.getString("product_id"));
+            purchase.setQuantity(rs.getString("quantity"));
+            purchase.setAmount(rs.getString("amount"));
+            purchase.setVendorId(rs.getString("vendor_id"));
+            purchaseList.add(purchase);
+        }
+        return purchaseList;
+    }
+
+
 
     public static int getTotalPurchaseByMonth() throws SQLException, ClassNotFoundException {
 

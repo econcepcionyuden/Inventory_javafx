@@ -30,6 +30,31 @@ public class UserDAO {
     }
 
 
+    public static void updateUser(String userId, String newName, String newRole) throws SQLException, ClassNotFoundException {
+
+
+        if (newName.isEmpty()) {
+            String updateStmt = "UPDATE user SET role = '" + newRole + "'  WHERE id = '" + userId + "'";
+            try {
+                DBUtil.dbExecuteUpdate(updateStmt);
+            } catch (SQLException e) {
+                System.out.print("Error occurred while UPDATE Operation: " + e);
+                throw e;
+            }
+
+        } else if (newRole.isEmpty()) {
+            String updateStmt = "UPDATE user SET first_name='" + newName + "' WHERE id = '" + userId + "'";
+            try {
+                DBUtil.dbExecuteUpdate(updateStmt);
+            } catch (SQLException e) {
+                System.out.print("Error occurred while UPDATE Operation: " + e);
+                throw e;
+            }
+        }
+    }
+
+
+
     public static User searchUserByName(String searchByName) throws SQLException, ClassNotFoundException {
 
         String selectStmt = "SELECT * FROM user WHERE first_name='"+searchByName+"'";

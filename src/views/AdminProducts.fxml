@@ -65,6 +65,7 @@
       <Label layoutX="10.0" layoutY="352.0" text="Surplus Point" />
       <JFXTextField fx:id="reOrderPoint" layoutX="117.0" layoutY="309.0" prefHeight="26.0" prefWidth="77.0" />
       <JFXTextField fx:id="surplusPoint" layoutX="116.0" layoutY="341.0" prefHeight="26.0" prefWidth="80.0" />
+      <JFXButton fx:id="reset1" layoutX="518.0" layoutY="65.0" onAction="#fieldsClear2" prefHeight="25.0" prefWidth="73.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Reset" textFill="#f5f0f0" />
         <!--<JFXButton fx:id="addProducts" layoutX="382.0" layoutY="449.0" onAction="#insertProduct" prefHeight="26.0" prefWidth="239.0" text="Add Productssss" />-->
     </children>
 </AnchorPane>

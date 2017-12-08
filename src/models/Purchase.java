@@ -15,6 +15,7 @@ public class Purchase {
     private StringProperty quantity;
     private StringProperty vendorId;
     private StringProperty productId;
+    private StringProperty amountQuantity;
 
     //Constructor
     public Purchase() {
@@ -24,7 +25,20 @@ public class Purchase {
         this.quantity = new SimpleStringProperty();
         this.vendorId = new SimpleStringProperty();
         this.productId = new SimpleStringProperty();
+        this.amountQuantity = new SimpleStringProperty();
 
+    }
+
+    public String getAmountQuantity() {
+        return amountQuantity.get();
+    }
+
+    public StringProperty amountQuantityProperty() {
+        return amountQuantity;
+    }
+
+    public void setAmountQuantity(String amountQuantity) {
+        this.amountQuantity.set(amountQuantity);
     }
 
     public String getPurchaseId() {

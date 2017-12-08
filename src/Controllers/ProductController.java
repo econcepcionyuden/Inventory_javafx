@@ -93,6 +93,18 @@ public class ProductController {
     }
 
 
+    @FXML
+    public void fieldsClear2(ActionEvent actionEvent) {
+
+        newQuantity.clear();
+        newUnitPrice.clear();
+        productId.clear();
+        newQuantity.clear();
+        newStatus.setValue("");
+
+    }
+
+
     //Search a product
     @FXML
     private void searchProduct(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
@@ -298,7 +310,7 @@ public class ProductController {
         if (event.getSource() == backBtn) {
             stage = (Stage) backBtn.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 700, 400);
             stage.setScene(scene);
             stage.show();
         }

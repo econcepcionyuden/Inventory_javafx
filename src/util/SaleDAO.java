@@ -168,4 +168,38 @@ public class SaleDAO {
             throw e;
         }
     }
+
+
+    public static ObservableList<Sale> totalSaleAmounts() throws SQLException, ClassNotFoundException {
+
+        String selectStmt = "select * from sale";
+        try {
+            ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
+            ObservableList<Sale> saleList = getSalesList(rsCount);
+            return saleList;
+
+        } catch (SQLException e) {
+            System.out.print("Error occurred: " + e);
+            throw e;
+        }
+    }
+
+    private static ObservableList<Sale> getSalesList(ResultSet rs) throws SQLException, ClassNotFoundException {
+
+        ObservableList<Sale> saleList = FXCollections.observableArrayList();
+        while (rs.next()) {
+            Sale sale = new Sale();
+            sale.setSaleId(rs.getString("id"));
+            sale.setTransaction_date(rs.getString("transaction_date"));
+            sale.setProductId(rs.getString("product_id"));
+            sale.setQuantity(rs.getString("quantity"));
+            sale.setAmount(rs.getString("amount"));
+            sale.setClientId(rs.getString("client_id"));
+            saleList.add(sale);
+        }
+        return saleList;
+    }
+
+
+
 }

@@ -1,6 +1,8 @@
 package Controllers;
 
+import javafx.util.Duration;
 import models.Product;
+import org.controlsfx.control.Notifications;
 import util.ProductDAO;
 import util.SaleDAO;
 import javafx.collections.FXCollections;
@@ -210,7 +212,7 @@ public class SaleController {
 
 
     @FXML
-    private void initialize() throws SQLException {
+    private void initialize() throws SQLException, ClassNotFoundException {
 
 
         clientId.setItems(clientList);
@@ -236,6 +238,32 @@ public class SaleController {
             throw e;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        }
+
+
+        ObservableList<Product> productData = ProductDAO.productTypeCount();
+
+        String[] title = new String[productData.size()];
+        int[] quantities = new int[productData.size()];
+        int[] reOrderPoints = new int[productData.size()];
+        int[] surpluses = new int[productData.size()];
+        for (int i = 0; i < productData.size(); i++) {
+            quantities[i] = Integer.parseInt(productData.get(i).getQuantity());
+            reOrderPoints[i] = Integer.parseInt(productData.get(i).getReOrderPoint());
+            surpluses[i] = Integer.parseInt(productData.get(i).getSurplusPoint());
+            title[i] = productData.get(i).getTitle();
+
+            if (quantities[i] >= surpluses[i]) {
+
+                Notifications.create()
+                        .title("Attention")
+                        .text("There is a surplus in " + title[i] + "")
+                        .hideAfter(Duration.seconds(5))
+                        .darkStyle()
+                        .showWarning();
+
+            }
+
         }
     }
 
@@ -276,7 +304,7 @@ public class SaleController {
         if (event.getSource() == backBtn2) {
             stage = (Stage) backBtn2.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 700, 400);
             stage.setScene(scene);
             stage.show();
         }

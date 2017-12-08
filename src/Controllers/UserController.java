@@ -29,6 +29,10 @@ public class UserController {
     @FXML
     private TextField firstName;
     @FXML
+    private TextField newName;
+    @FXML
+    private TextField newUserId;
+    @FXML
     private TextField lastName;
     @FXML
     private TextField searchField;
@@ -42,6 +46,8 @@ public class UserController {
     private TextField password;
     @FXML
     private ChoiceBox<String> role;
+    @FXML
+    private ChoiceBox<String> newRole;
     @FXML
     private TableView userTable;
     @FXML
@@ -59,6 +65,7 @@ public class UserController {
 
     ObservableList<String> roleList = FXCollections.observableArrayList("","Admin", "Operator");
     ObservableList<String> criteriaList = FXCollections.observableArrayList("","Name", "Role");
+    ObservableList<String> newRoleList = FXCollections.observableArrayList("Admin", "Operator");
 
     @FXML
     public void fieldsClear(ActionEvent actionEvent) {
@@ -68,9 +75,15 @@ public class UserController {
         lastName.clear();
         password.clear();
         role.setValue("");
-
     }
 
+    @FXML
+    public void fieldsClear2(ActionEvent actionEvent) {
+
+        newName.clear();
+        newUserId.clear();
+        newRole.setValue("");
+    }
 
     @FXML
     public void nameClear(ActionEvent actionEvent) {
@@ -120,6 +133,25 @@ public class UserController {
             }
         }
 
+    }
+
+
+    @FXML
+    private void updateUser(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        try {
+            UserDAO.updateUser(newUserId.getText(), newName.getText(), newRole.getValue().toString());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Product update");
+            alert.setHeaderText("Success message");
+            alert.setContentText("The product "+ userId.getText() + " was successfully updated!!");
+            alert.showAndWait();
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Product delete");
+            alert.setHeaderText("Failure message");
+            alert.setContentText("Problem occurred while updating user " + e);
+            alert.showAndWait();
+        }
     }
 
 
@@ -186,6 +218,7 @@ public class UserController {
 
         role.setItems(roleList);
         searchChoice.setItems(criteriaList);
+        newRole.setItems(newRoleList);
         userIdColumn.setCellValueFactory(cellData -> cellData.getValue().userIdProperty());
         firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
         lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
@@ -275,7 +308,7 @@ public class UserController {
             stage = (Stage) backBtn2.getScene().getWindow();
             //load up OTHER FXML document
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 700, 400);
             stage.setScene(scene);
             stage.show();
         }

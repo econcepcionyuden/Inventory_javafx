@@ -260,7 +260,7 @@ public class ClientController {
         if (event.getSource() == backBtn2) {
             stage = (Stage) backBtn2.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 700, 400);
             stage.setScene(scene);
             stage.show();
         }

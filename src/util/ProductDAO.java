@@ -55,6 +55,8 @@ public class ProductDAO {
             product.setUnitPrice(rs.getString("unit_price"));
             product.setQuantity(rs.getString("quantity"));
             product.setProductStatus(rs.getString("status"));
+            product.setReOrderPoint(rs.getString("reorder_point"));
+            product.setSurplusPoint(rs.getString("surplus_point"));
         }
         return product;
     }
@@ -74,7 +76,6 @@ public class ProductDAO {
             throw e;
         }
     }
-
 
 
     public static ObservableList<Product> searchProductsByTitle(String title) throws SQLException, ClassNotFoundException {
@@ -121,6 +122,8 @@ public class ProductDAO {
             product.setUnitPrice(rs.getString("unit_price"));
             product.setQuantity(rs.getString("quantity"));
             product.setProductStatus(rs.getString("status"));
+            product.setReOrderPoint(rs.getString("reorder_point"));
+            product.setSurplusPoint(rs.getString("surplus_point"));
             productList.add(product);
         }
 
@@ -158,9 +161,36 @@ public class ProductDAO {
                 throw e;
             }
 
+        } else if (unitPrice.isEmpty()) {
+            String updateStmt = "UPDATE product SET status='" + status + "',quantity ='" + quantity + "' WHERE id = '" + productId + "'";
+            try {
+                DBUtil.dbExecuteUpdate(updateStmt);
+            } catch (SQLException e) {
+                System.out.print("Error occurred while UPDATE Operation: " + e);
+                throw e;
+            }
+
+        } else if (status.isEmpty()) {
+            String updateStmt = "UPDATE product SET unit_price='" + unitPrice + "',quantity ='" + quantity + "' WHERE id = '" + productId + "'";
+            try {
+                DBUtil.dbExecuteUpdate(updateStmt);
+            } catch (SQLException e) {
+                System.out.print("Error occurred while UPDATE Operation: " + e);
+                throw e;
+            }
+
+        } else if (quantity.isEmpty()) {
+            String updateStmt = "UPDATE product SET status='" + status + "',quantity ='" + quantity + "' WHERE id = '" + productId + "'";
+            try {
+                DBUtil.dbExecuteUpdate(updateStmt);
+            } catch (SQLException e) {
+                System.out.print("Error occurred while UPDATE Operation: " + e);
+                throw e;
+            }
+
         } else {
 
-            String updateStmt = "UPDATE product SET unit_price='" + unitPrice + "', quantity = '" + quantity + "'  WHERE id = '" + productId + "'";
+            String updateStmt = "UPDATE product SET unit_price='" + unitPrice + "', quantity = '" + quantity + "',status='" + status + "'  WHERE id = '" + productId + "'";
             try {
                 DBUtil.dbExecuteUpdate(updateStmt);
             } catch (SQLException e) {
@@ -222,13 +252,28 @@ public class ProductDAO {
     }
 
 
-    public static void insertProduct(String id, String title, String type, String description, String unit_price, String quantity, String status,String reorder,String surplus) throws SQLException, ClassNotFoundException {
+    public static void insertProduct(String id, String title, String type, String description, String unit_price, String quantity, String status, String reorder, String surplus) throws SQLException, ClassNotFoundException {
 
         String updateStmt = "INSERT INTO product(id,title, type, description, unit_price, quantity, status,reorder_point,surplus_point) VALUES('" + id + "','" + title + "', '" + type + "','" + description + "', '" + unit_price + "', '" + quantity + "', '" + status + "','" + reorder + "','" + surplus + "')";
         try {
             DBUtil.dbExecuteUpdate(updateStmt);
         } catch (SQLException e) {
             System.out.print("Error occurred while insert Operation: " + e);
+            throw e;
+        }
+    }
+
+
+    public static ObservableList<Product> productTypeCount() throws SQLException, ClassNotFoundException {
+
+        String selectStmt = "SELECT * FROM product";
+        try {
+            ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
+            ObservableList<Product> productList = getProductList(rsCount);
+            return productList;
+
+        } catch (SQLException e) {
+            System.out.print("Error occurred while UPDATE Operation: " + e);
             throw e;
         }
     }

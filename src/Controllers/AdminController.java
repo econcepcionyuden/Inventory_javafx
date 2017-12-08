@@ -1,6 +1,7 @@
 package Controllers;
 
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import models.Product;
+import models.Purchase;
+import models.Sale;
+import org.controlsfx.control.Notifications;
 import util.ProductDAO;
 import util.PurchaseDAO;
 import util.SaleDAO;
@@ -34,6 +40,12 @@ public class AdminController {
     private Button productsBtn;
     @FXML
     private TextField userCount;
+    @FXML
+    private TextField totalExpenseField;
+    @FXML
+    private TextField totalIncomeField;
+    @FXML
+    private TextField grossProfitField;
     @FXML
     private TextField saleCount;
     @FXML
@@ -99,7 +111,7 @@ public class AdminController {
 
 
     @FXML
-    private void initialize() throws SQLException, ClassNotFoundException {
+    private void initialize() throws SQLException, ClassNotFoundException, IOException {
 
         //Get all overall information
         int productNo = ProductDAO.productCount();
@@ -118,7 +130,78 @@ public class AdminController {
         String purchaseNoString = Integer.toString(purchaseNo);
         purchaseCount.setText(purchaseNoString);
 
-    }
+        ObservableList<Purchase> purchaseData = PurchaseDAO.totalPurchaseAmounts();
 
+        int[] quantities = new int[purchaseData.size()];
+        int[] amounts = new int[purchaseData.size()];
+        int totalExpense = 0;
+        for (int i = 0; i < purchaseData.size(); i++) {
+            quantities[i] = Integer.parseInt(purchaseData.get(i).getQuantity());
+            amounts[i] = Integer.parseInt(purchaseData.get(i).getAmount());
+
+            totalExpense += quantities[i] * amounts[i];
+
+        }
+        String totalExpenseString = Integer.toString(totalExpense);
+        totalExpenseField.setText(totalExpenseString);
+
+
+        ObservableList<Sale> saleData = SaleDAO.totalSaleAmounts();
+
+        int[] saleQuantities = new int[saleData.size()];
+        int[] saleAmounts = new int[saleData.size()];
+        int totalIncome = 0;
+        for (int i = 0; i < saleData.size(); i++) {
+            saleQuantities[i] = Integer.parseInt(saleData.get(i).getQuantity());
+            saleAmounts[i] = Integer.parseInt(saleData.get(i).getAmount());
+            totalIncome += saleQuantities[i] * saleAmounts[i];
+        }
+
+        String totalIncomeString = Integer.toString(totalIncome);
+        totalIncomeField.setText(totalIncomeString);
+
+        int grossProfit = totalIncome - totalExpense;
+        String stringGrossProfit = Integer.toString(grossProfit);
+        grossProfitField.setText(stringGrossProfit);
+
+
+
+        //  String totalPurchaseQuntities = PurchaseDAO.totalPurchaseQuntities();
+
+
+//        ObservableList<Product> productData = ProductDAO.productTypeCount();
+//
+//        String[] title = new String[productData.size()];
+//        int[] quantities = new int[productData.size()];
+//        int[] reOrderPoints = new int[productData.size()];
+//        int[] surpluses = new int[productData.size()];
+//        for (int i = 0; i < productData.size(); i++) {
+//            quantities[i] = Integer.parseInt(productData.get(i).getQuantity());
+//            reOrderPoints[i] = Integer.parseInt(productData.get(i).getReOrderPoint());
+//            surpluses[i] = Integer.parseInt(productData.get(i).getSurplusPoint());
+//            title[i] = productData.get(i).getTitle();
+//
+//            if (quantities[i] >= surpluses[i]) {
+//
+//                Notifications.create()
+//                        .title("Attention")
+//                        .text("There is a surplus in " + title[i] + "")
+//                        .hideAfter(Duration.seconds(5))
+//                        .darkStyle()
+//                        .showWarning();
+//
+//            } else if (quantities[i] <= reOrderPoints[i]) {
+//
+//                Notifications.create()
+//                        .title("Attention")
+//                        .text("There is a need for reorder in " + title[i] + "")
+//                        .hideAfter(Duration.seconds(5))
+//                        .darkStyle()
+//                        .showWarning();
+//            }
+//
+//        }
+
+    }
 
 }

@@ -9,9 +9,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import models.Product;
 import models.Purchase;
 import models.Vendor;
+import org.controlsfx.control.Notifications;
 import util.ProductDAO;
 import util.PurchaseDAO;
 import util.VendorDAO;
@@ -181,7 +183,7 @@ public class PurchaseController {
 
 
     @FXML
-    private void initialize() throws SQLException {
+    private void initialize() throws SQLException, ClassNotFoundException {
 
         productId.setItems(productList);
         vendorId.setItems(vendorList);
@@ -207,6 +209,28 @@ public class PurchaseController {
             e.printStackTrace();
         }
 
+        ObservableList<Product> productData = ProductDAO.productTypeCount();
+
+        String[] title = new String[productData.size()];
+        int[] quantities = new int[productData.size()];
+        int[] reOrderPoints = new int[productData.size()];
+        int[] surpluses = new int[productData.size()];
+        for (int i = 0; i < productData.size(); i++) {
+            quantities[i] = Integer.parseInt(productData.get(i).getQuantity());
+            reOrderPoints[i] = Integer.parseInt(productData.get(i).getReOrderPoint());
+            surpluses[i] = Integer.parseInt(productData.get(i).getSurplusPoint());
+            title[i] = productData.get(i).getTitle();
+
+            if (quantities[i] <= reOrderPoints[i]) {
+
+                Notifications.create()
+                        .title("Attention")
+                        .text("There is a need for reorder in " + title[i] + "")
+                        .hideAfter(Duration.seconds(5))
+                        .darkStyle()
+                        .showWarning();
+            }
+        }
 
 //        try {
 //            //Get all users information
@@ -260,7 +284,7 @@ public class PurchaseController {
         if (event.getSource() == backBtn) {
             stage = (Stage) backBtn.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 700, 400);
             stage.setScene(scene);
             stage.show();
         }
