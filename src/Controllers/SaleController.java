@@ -1,8 +1,10 @@
 package Controllers;
 
 import javafx.util.Duration;
+import models.Client;
 import models.Product;
 import org.controlsfx.control.Notifications;
+import util.ClientDAO;
 import util.ProductDAO;
 import util.SaleDAO;
 import javafx.collections.FXCollections;
@@ -28,8 +30,6 @@ import java.util.List;
  */
 public class SaleController {
 
-    ObservableList<String> clientList = FXCollections.observableArrayList("","C001", "C002", "C003");
-    ObservableList<String> productList = FXCollections.observableArrayList("","G001", "G002", "G003", "G004","G005");
     ObservableList<String> criteriaList = FXCollections.observableArrayList("", "Date", "ID");
 
     @FXML
@@ -56,14 +56,16 @@ public class SaleController {
     private TableView saleTable;
     @FXML
     private TableColumn<Sale, String> saleIdColumn;
-//    @FXML
-//    private TableColumn<Sale, String> productColumn;
     @FXML
     private TableColumn<Sale, String> transactionDateColumn;
+    @FXML
+    private TableColumn<Sale, String> productColumn;
     @FXML
     private TableColumn<Sale, String> sellingPriceColumn;
     @FXML
     private TableColumn<Sale, String> quantityColumn;
+    @FXML
+    private TableColumn<Sale, String> clientColumn;
     @FXML
     private Button dateClearBtn;
     @FXML
@@ -71,33 +73,6 @@ public class SaleController {
     @FXML
     private Button idClearBtn;
 
-    @FXML
-    public void fieldsClear(ActionEvent actionEvent) {
-
-        insertSaleId.clear();
-        sellingPrice.clear();
-        quantity.clear();
-        clientId.setValue("");
-        productId.setValue("");
-    }
-
-
-    @FXML
-    public void dateClear(ActionEvent actionEvent) {
-
-        saleDate.clear();
-    }
-
-    @FXML
-    public void idClear(ActionEvent actionEvent) {
-
-        saleId.clear();
-    }
-
-
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-    LocalDateTime now = LocalDateTime.now();
-    String date = dtf.format(now);
 
     //  Search a sale by date and id
     @FXML
@@ -112,7 +87,7 @@ public class SaleController {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Failure message");
-                alert.setContentText("Error occurred while getting product information from DB" + e);
+                alert.setContentText("Error occurred while getting sales information from DB" + e);
                 alert.showAndWait();
                 throw e;
             }
@@ -127,35 +102,12 @@ public class SaleController {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Failure message");
-                alert.setContentText("Error occurred while getting product information from DB" + e);
+                alert.setContentText("Error occurred while getting sales information from DB" + e);
                 alert.showAndWait();
                 throw e;
             }
         }
 
-    }
-
-
-    //Search all clients
-    @FXML
-    private static List getClients() throws SQLException, ClassNotFoundException {
-        try {
-            //Get all Clients information
-            // ObservableList<Client> clientData = SaleDAO.getClients();
-
-            List clients = SaleDAO.getClients();
-
-            ObservableList<String> clientList = FXCollections.observableArrayList(clients);
-            return clientList;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Failure message");
-            alert.setContentText("Error occurred while getting product information from DB" + e);
-            alert.showAndWait();
-            throw e;
-        }
     }
 
 
@@ -178,8 +130,6 @@ public class SaleController {
     }
 
 
-
-
     @FXML
     private void populateAndShowSale(Sale sale) throws ClassNotFoundException {
         if (sale != null) {
@@ -189,7 +139,7 @@ public class SaleController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Failure message");
-            alert.setContentText("This product does not exist!");
+            alert.setContentText("This transaction does not exist!");
             alert.showAndWait();
         }
     }
@@ -210,36 +160,46 @@ public class SaleController {
     }
 
 
-
     @FXML
     private void initialize() throws SQLException, ClassNotFoundException {
 
+//        ObservableList<Product> productsData = ProductDAO.searchProducts();
+//        ObservableList<Client> clientsData = ClientDAO.searchAllClients();
+//
+//        String productIds[] = new String[productsData.size()];
+//        for (int i = 0; i < productsData.size(); i++) {
+//            productIds[i] = productsData.get(i).getProductId();
+//        }
+//        String clientIds[] = new String[clientsData.size()];
+//        for (int i = 0; i < clientsData.size(); i++) {
+//            clientIds[i] = clientsData.get(i).getClientId();
+//        }
 
-        clientId.setItems(clientList);
-        productId.setItems(productList);
-        searchChoice.setItems(criteriaList);
-        saleIdColumn.setCellValueFactory(cellData -> cellData.getValue().saleIdProperty());
-       // productColumn.setCellValueFactory(cellData -> cellData.getValue().productIdProperty());
-        transactionDateColumn.setCellValueFactory(cellData -> cellData.getValue().transaction_dateProperty());
-        sellingPriceColumn.setCellValueFactory(cellData -> cellData.getValue().amountProperty());
-        quantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityProperty());
+//        ObservableList<String> productList = FXCollections.observableArrayList(productIds);
+//        ObservableList<String> clientList = FXCollections.observableArrayList(clientIds);
+
         try {
-
             ObservableList<Sale> saleData = SaleDAO.searchSales();
-
             populateSales(saleData);
         } catch (SQLException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Failure message");
-            alert.setContentText("Error occurred while getting product information from DB" + e);
+            alert.setContentText("Error occurred while getting sales information from DB" + e);
             alert.showAndWait();
             throw e;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
+        searchChoice.setItems(criteriaList);
+        saleIdColumn.setCellValueFactory(cellData -> cellData.getValue().saleIdProperty());
+        productColumn.setCellValueFactory(cellData -> cellData.getValue().productIdProperty());
+        transactionDateColumn.setCellValueFactory(cellData -> cellData.getValue().transaction_dateProperty());
+        sellingPriceColumn.setCellValueFactory(cellData -> cellData.getValue().amountProperty());
+        quantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityProperty());
+        clientColumn.setCellValueFactory(cellData -> cellData.getValue().clientIdProperty());
 
         ObservableList<Product> productData = ProductDAO.productTypeCount();
 
@@ -265,36 +225,37 @@ public class SaleController {
             }
 
         }
+
     }
 
 
-    @FXML
-    private void sell(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-
-        Product product = ProductDAO.searchProduct(productId.getValue().toString());
-
-        int newQuantity = Integer.parseInt(product.getQuantity()) - Integer.parseInt(quantity.getText());
-
-        String newQuantityString = String.valueOf(newQuantity);
-
-        try {
-            SaleDAO.sell(insertSaleId.getText(), productId.getValue().toString(), date, sellingPrice.getText(), quantity.getText(), clientId.getValue().toString());
-            ProductDAO.updateProductAfterSelling(productId.getValue().toString(), newQuantityString);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Add sale");
-            alert.setHeaderText("Success message");
-            alert.setContentText("The sale of " + productId.getValue().toString() + " product was successfully added!!");
-            alert.showAndWait();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Failure message");
-            alert.setContentText("Problem occurred while adding transaction" + e);
-            alert.showAndWait();
-            throw e;
-        }
-    }
+//    @FXML
+//    private void sell(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+//
+//        Product product = ProductDAO.searchProduct(productId.getValue().toString());
+//
+//        int newQuantity = Integer.parseInt(product.getQuantity()) - Integer.parseInt(quantity.getText());
+//
+//        String newQuantityString = String.valueOf(newQuantity);
+//
+//        try {
+//            SaleDAO.sell(productId.getValue().toString(), date, sellingPrice.getText(), quantity.getText(), clientId.getValue().toString());
+//            ProductDAO.updateProductAfterSelling(productId.getValue().toString(), newQuantityString);
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setTitle("Add sale");
+//            alert.setHeaderText("Success message");
+//            alert.setContentText("The sale of " + productId.getValue().toString() + " product was successfully added!!");
+//            alert.showAndWait();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Error");
+//            alert.setHeaderText("Failure message");
+//            alert.setContentText("Problem occurred while adding transaction" + e);
+//            alert.showAndWait();
+//            throw e;
+//        }
+//    }
 
     @FXML
     private void backAction2(ActionEvent event) throws IOException {
@@ -304,11 +265,23 @@ public class SaleController {
         if (event.getSource() == backBtn2) {
             stage = (Stage) backBtn2.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 700, 400);
+            Scene scene = new Scene(root, 950, 550);
             stage.setScene(scene);
             stage.show();
         }
 
     }
 
+
+    @FXML
+    private void closeButtonAction() {
+        Stage stage = (Stage) saleTable.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void minimizeAction() {
+        Stage stage = (Stage) saleTable.getScene().getWindow();
+        stage.setIconified(true);
+    }
 }

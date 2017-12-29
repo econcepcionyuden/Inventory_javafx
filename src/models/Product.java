@@ -16,6 +16,8 @@ public class Product {
     private StringProperty productStatus;
     private StringProperty reOrderPoint;
     private StringProperty surplusPoint;
+    private StringProperty addedDate;
+    private StringProperty expireDate;
 
     //Constructor
     public Product() {
@@ -30,6 +32,33 @@ public class Product {
         this.productStatus = new SimpleStringProperty();
         this.reOrderPoint = new SimpleStringProperty();
         this.surplusPoint = new SimpleStringProperty();
+        this.addedDate = new SimpleStringProperty();
+        this.expireDate = new SimpleStringProperty();
+    }
+
+
+    public String getAddedDate() {
+        return addedDate.get();
+    }
+
+    public StringProperty addedDateProperty() {
+        return addedDate;
+    }
+
+    public void setAddedDate(String addedDate) {
+        this.addedDate.set(addedDate);
+    }
+
+    public String getExpireDate() {
+        return expireDate.get();
+    }
+
+    public StringProperty expireDateProperty() {
+        return expireDate;
+    }
+
+    public void setExpireDate(String expireDate) {
+        this.expireDate.set(expireDate);
     }
 
     public String getReOrderPoint() {

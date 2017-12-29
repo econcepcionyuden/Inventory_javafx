@@ -18,7 +18,7 @@ public class DBUtil {
             conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWD);
             System.out.println("DB Connection successful!");
         } catch (ClassNotFoundException e) {
-            System.out.println("Where is your Oracle JDBC Driver?");
+            System.out.println("DB Connection failed");
             e.printStackTrace();
             throw e;
         }

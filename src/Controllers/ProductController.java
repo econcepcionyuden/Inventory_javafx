@@ -5,7 +5,9 @@ package Controllers;
  */
 
 
-
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 import util.ProductDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,14 +19,22 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import models.Product;
-
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 
 public class ProductController {
 
-    ObservableList<String> productType = FXCollections.observableArrayList("","Construction", "Electric", "Decoration","Other");
+    ObservableList<String> productType = FXCollections.observableArrayList("", "Construction", "Electric", "Decoration", "Other");
 
 
     @FXML
@@ -47,11 +57,13 @@ public class ProductController {
     @FXML
     private TextField unitPrice;
     @FXML
+    private DatePicker expireDate;
+    @FXML
     private TextField reOrderPoint;
     @FXML
     private TextField surplusPoint;
     @FXML
-    private ChoiceBox<String> type;
+    private ComboBox<String> typeBox;
     @FXML
     private ChoiceBox<String> newStatus;
     @FXML
@@ -71,13 +83,23 @@ public class ProductController {
     @FXML
     private TableColumn<Product, String> productQuantityColumn;
 
+    private double xOffset = 0;
+    private double yOffset = 0;
+
     ObservableList<String> criteriaList = FXCollections.observableArrayList("", "Title", "Type");
-    ObservableList<String> statusList = FXCollections.observableArrayList("", "In stock", "Returned","Expired");
+    ObservableList<String> statusList = FXCollections.observableArrayList("", "Good","Expired","Damaged");
 
     @FXML
     private Button backBtn;
     @FXML
     private Button addProducts;
+
+
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDateTime now = LocalDateTime.now();
+    String date = dtf.format(now);
+
+
 
 
     @FXML
@@ -88,19 +110,44 @@ public class ProductController {
         unitPrice.clear();
         quantity.clear();
         description.clear();
-        type.setValue("");
+        typeBox.setValue("");
+        reOrderPoint.clear();
+        surplusPoint.clear();
+        expireDate.getEditor().clear();
+        expireDate.setValue(null);
 
     }
 
 
     @FXML
     public void fieldsClear2(ActionEvent actionEvent) {
-
         newQuantity.clear();
         newUnitPrice.clear();
         productId.clear();
         newQuantity.clear();
         newStatus.setValue("");
+    }
+
+    @FXML
+    public void addProduct(ActionEvent event) throws Exception {
+
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/addProduct.fxml")));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        root.setOnMousePressed((MouseEvent e) -> {
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) -> {
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Add Product");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.showAndWait();
 
     }
 
@@ -111,8 +158,7 @@ public class ProductController {
 
         if (searchChoice.getValue().toString().equals("Title")) {
             try {
-
-                ObservableList<Product> productData= ProductDAO.searchProductsByTitle(searchField.getText());
+                ObservableList<Product> productData = ProductDAO.searchProductsByTitle(searchField.getText());
                 populateProducts(productData);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -126,8 +172,7 @@ public class ProductController {
         } else {
 
             try {
-
-                ObservableList<Product> productData= ProductDAO.searchProductsByType(searchField.getText());
+                ObservableList<Product> productData = ProductDAO.searchProductsByType(searchField.getText());
                 populateProducts(productData);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -161,9 +206,9 @@ public class ProductController {
 
 
     @FXML
-    private void initialize() throws SQLException {
+    private void initialize() throws SQLException, ParseException {
 
-        type.setItems(productType);
+      //  typeBox.setItems(productType);
         searchChoice.setItems(criteriaList);
         newStatus.setItems(statusList);
         productIdColumn.setCellValueFactory(cellData -> cellData.getValue().productIdProperty());
@@ -174,21 +219,39 @@ public class ProductController {
         productStatusColumn.setCellValueFactory(cellData -> cellData.getValue().productStatusProperty());
 
 
-
         try {
 
             ObservableList<Product> productData = ProductDAO.searchProducts();
             populateProducts(productData);
+            String[] expireDate = new String[productData.size()];
+            String[] id = new String[productData.size()];
+            for (int i = 0; i < productData.size(); i++) {
+                expireDate[i] = productData.get(i).getExpireDate();
+                id[i] = productData.get(i).getProductId();
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                Date expireDateString = format.parse(expireDate[i]);
+
+                Date in = new Date();
+                LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
+                Date today = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+
+                if (expireDateString.before(today)) {
+                    ProductDAO.updateProductStatus(id[i]);
+                }
+            }
+
+
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Products search");
+            alert.setTitle("Products loading");
             alert.setHeaderText("Failure message");
-            alert.setContentText("Problem occurred while searching products " + e);
+            alert.setContentText("Problem occurred while loading products " + e);
             alert.showAndWait();
             throw e;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
 
     }
 
@@ -227,11 +290,11 @@ public class ProductController {
     @FXML
     private void updateProduct(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         try {
-            ProductDAO.updateProduct(productId.getText(), newUnitPrice.getText(), newQuantity.getText(),newStatus.getValue().toString());
+            ProductDAO.updateProduct(productId.getText(), newUnitPrice.getText(), newQuantity.getText(), newStatus.getValue().toString());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Product update");
             alert.setHeaderText("Success message");
-            alert.setContentText("The product "+ productId.getText() + " was successfully updated!!");
+            alert.setContentText("The product " + productId.getText() + " was successfully updated!!");
             alert.showAndWait();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -247,7 +310,7 @@ public class ProductController {
     private void insertProduct(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         String status = "In stock";
         try {
-            ProductDAO.insertProduct(insertProductId.getText(), title.getText(), type.getValue().toString(), description.getText(), unitPrice.getText(), quantity.getText(),status,reOrderPoint.getText(),surplusPoint.getText());
+            ProductDAO.insertProduct(insertProductId.getText(), title.getText(), typeBox.getValue().toString(), description.getText(), unitPrice.getText(), quantity.getText(), status, reOrderPoint.getText(), surplusPoint.getText(), date, expireDate.getValue().toString());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Product add");
             alert.setHeaderText("Success message");
@@ -273,17 +336,17 @@ public class ProductController {
         Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
         alert1.setTitle("Delete Confirmation");
         alert1.setHeaderText("Please confirm the action");
-        alert1.setContentText("Are you sure you want to delete the product "+id+" \nfrom the system? ");
+        alert1.setContentText("Are you sure you want to delete the product " + id + " \nfrom the system? ");
 
         Optional<ButtonType> result = alert1.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
 
             try {
                 ProductDAO.deleteProductWithId(id);
                 Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                 alert2.setTitle("Product delete");
                 alert2.setHeaderText("Success message");
-                alert2.setContentText("The product "+ id + " was successfully deleted!!");
+                alert2.setContentText("The product " + id + " was successfully deleted!!");
                 alert2.showAndWait();
                 productTable.getItems().remove(selectedItem);
             } catch (SQLException e) {
@@ -310,11 +373,24 @@ public class ProductController {
         if (event.getSource() == backBtn) {
             stage = (Stage) backBtn.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 700, 400);
+            Scene scene = new Scene(root, 950, 550);
             stage.setScene(scene);
             stage.show();
         }
 
+    }
+
+
+    @FXML
+    private void closeButtonAction() {
+        Stage stage = (Stage) productTable.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void minimizeAction() {
+        Stage stage = (Stage) productTable.getScene().getWindow();
+        stage.setIconified(true);
     }
 
 //

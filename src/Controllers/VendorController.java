@@ -8,10 +8,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import models.User;
+import javafx.stage.StageStyle;
 import models.Vendor;
-import util.UserDAO;
 import util.VendorDAO;
 
 import java.io.IOException;
@@ -59,6 +60,8 @@ public class VendorController {
     private Button backBtn2;
 
     ObservableList<String> criteriaList = FXCollections.observableArrayList("","Company", "Name");
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     @FXML
     public void fieldsClear(ActionEvent actionEvent) {
@@ -194,7 +197,7 @@ public class VendorController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Failure message");
-            alert.setContentText("Error occurred while getting user information from DB" + e);
+            alert.setContentText("Error occurred while getting vendor information from DB" + e);
             alert.showAndWait();
             throw e;
         } catch (ClassNotFoundException e) {
@@ -233,27 +236,6 @@ public class VendorController {
 
 
     @FXML
-    private void addVendor(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, NoSuchAlgorithmException {
-
-        try {
-            VendorDAO.addVendor(vendorId.getText(), name.getText(), company.getText(), address.getText(), contact.getText());
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Add vendor");
-            alert.setHeaderText("Success message");
-            alert.setContentText("The vendor " + vendorId.getText() + " was successfully added!!");
-            alert.showAndWait();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Failure message");
-            alert.setContentText("Problem occurred while adding the vendor");
-            alert.showAndWait();
-            throw e;
-        }
-    }
-
-    @FXML
     private void backAction2(ActionEvent event) throws IOException {
         Stage stage;
         Parent root;
@@ -261,12 +243,44 @@ public class VendorController {
         if (event.getSource() == backBtn2) {
             stage = (Stage) backBtn2.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 700, 400);
+            Scene scene = new Scene(root, 950, 550);
             stage.setScene(scene);
             stage.show();
         }
 
     }
+    @FXML
+    private void closeButtonAction() {
+        Stage stage = (Stage) vendorTable.getScene().getWindow();
+        stage.close();
+    }
 
+    @FXML
+    private void minimizeAction() {
+        Stage stage = (Stage) vendorTable.getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+    @FXML
+    public void addVendor(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/addVendor.fxml")));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        root.setOnMousePressed((MouseEvent e) -> {
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) -> {
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Add Supplier");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
 
 }

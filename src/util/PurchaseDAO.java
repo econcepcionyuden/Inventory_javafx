@@ -30,7 +30,7 @@ public class PurchaseDAO {
 
             return purchase;
         } catch (SQLException e) {
-            System.out.println("While searching an product with '" + purchaseId + "' id, an error occurred: " + e);
+            System.out.println("While searching an purchase with '" + purchaseId + "' id, an error occurred: " + e);
 
             throw e;
         }
@@ -46,7 +46,7 @@ public class PurchaseDAO {
             Purchase purchase = getSaleFromResultSet(rsPurchase);
             return purchase;
         } catch (SQLException e) {
-            System.out.println("While searching an product with '" + purchaseDate + "' id, an error occurred: " + e);
+            System.out.println("While searching an purchase with '" + purchaseDate + "' id, an error occurred: " + e);
 
             throw e;
         }
@@ -60,10 +60,10 @@ public class PurchaseDAO {
             purchase = new Purchase();
             purchase.setPurchaseId(rs.getString("id"));
             purchase.setTransaction_date(rs.getString("transaction_date"));
-            purchase.setAmount(rs.getString("product_id"));
+            purchase.setProductId(rs.getString("product_id"));
             purchase.setQuantity(rs.getString("quantity"));
-            purchase.setQuantity(rs.getString("amount"));
-            purchase.setQuantity(rs.getString("vendor_id"));
+            purchase.setAmount(rs.getString("amount"));
+            purchase.setVendorId(rs.getString("vendor_id"));
 
         }
         return purchase;
@@ -94,15 +94,17 @@ public class PurchaseDAO {
             purchase.setTransaction_date(rs.getString("transaction_date"));
             purchase.setAmount(rs.getString("amount"));
             purchase.setQuantity(rs.getString("quantity"));
+            purchase.setProductId(rs.getString("product_id"));
+            purchase.setVendorId(rs.getString("vendor_id"));
             purchaseList.add(purchase);
         }
         return purchaseList;
     }
 
 
-    public static int purchaseCount() throws SQLException, ClassNotFoundException {
+    public static int purchaseCount(String date) throws SQLException, ClassNotFoundException {
 
-        String selectStmt = "SELECT COUNT(id) AS noOfPurchases FROM purchase";
+        String selectStmt = "SELECT COUNT(id) AS noOfPurchases FROM purchase where transaction_date > '"+ date +"'";
         try {
             ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
             int count = 0;
@@ -112,22 +114,37 @@ public class PurchaseDAO {
             return count;
 
         } catch (SQLException e) {
-            System.out.print("Error occurred while UPDATE Operation: " + e);
+            System.out.print("Error occurred while SELECT Operation: " + e);
             throw e;
         }
     }
 
 
-    public static ObservableList<Purchase> totalPurchaseAmounts() throws SQLException, ClassNotFoundException {
+    public static ObservableList<Purchase> totalPurchaseAmounts(String date) throws SQLException, ClassNotFoundException {
 
-        String selectStmt = "select * from purchase";
+        String selectStmt = "select * from purchase where transaction_date > '"+ date +"'";
         try {
             ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
             ObservableList<Purchase> purchaseList = getPurchasesList(rsCount);
             return purchaseList;
 
         } catch (SQLException e) {
-            System.out.print("Error occurred: " + e);
+            System.out.print("Error occurred while SELECT Operation: " + e);
+            throw e;
+        }
+    }
+
+
+    public static ObservableList<Purchase> previousTotalPurchaseAmounts(String previousDate, String date) throws SQLException, ClassNotFoundException {
+
+        String selectStmt = "select * from purchase where transaction_date > '"+ previousDate +"' AND '"+ date +"' > transaction_date";
+        try {
+            ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
+            ObservableList<Purchase> purchaseList = getPurchasesList(rsCount);
+            return purchaseList;
+
+        } catch (SQLException e) {
+            System.out.print("Error occurred while SELECT Operation: " + e);
             throw e;
         }
     }
@@ -162,20 +179,20 @@ public class PurchaseDAO {
             return count;
 
         } catch (SQLException e) {
-            System.out.print("Error occurred while UPDATE Operation: " + e);
+            System.out.print("Error occurred while SELECT Operation: " + e);
             throw e;
         }
     }
 
 
-    public static void purchase(String id,String productId,String date, String amount, String quantity,String vendorId) throws SQLException, ClassNotFoundException {
+    public static void purchase(String productId,String date, String amount, String quantity,String vendorId) throws SQLException, ClassNotFoundException {
 
-        String updateStmt = "INSERT INTO purchase(id,transaction_date,amount,quantity,product_id,vendor_id) VALUES('"+id+"','"+date+"','"+amount+"','"+quantity+"','"+productId+"','"+vendorId+"')";
+        String updateStmt = "INSERT INTO purchase(transaction_date,amount,quantity,product_id,vendor_id) VALUES('"+date+"','"+amount+"','"+quantity+"','"+productId+"','"+vendorId+"')";
         try {
             DBUtil.dbExecuteUpdate(updateStmt);
 
         } catch (SQLException e) {
-            System.out.print("Error occurred while inserting purchasing data: " + e);
+            System.out.print("Error occurred while inserting purchase data: " + e);
             throw e;
         }
     }

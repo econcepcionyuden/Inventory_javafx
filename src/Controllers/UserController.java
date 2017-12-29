@@ -8,9 +8,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import models.User;
-import util.ProductDAO;
 import util.UserDAO;
 
 import java.io.IOException;
@@ -59,13 +61,21 @@ public class UserController {
     @FXML
     private TableColumn<User, String> roleColumn;
     @FXML
+    private TableColumn<User, String> contactColumn;
+    @FXML
+    private TableColumn<User, String> addressColumn;
+    @FXML
     private Button backBtn2;
     @FXML
     private Button reset;
+    @FXML
+    private Button addUser;
 
-    ObservableList<String> roleList = FXCollections.observableArrayList("","Admin", "Operator");
-    ObservableList<String> criteriaList = FXCollections.observableArrayList("","Name", "Role");
-    ObservableList<String> newRoleList = FXCollections.observableArrayList("Admin", "Operator");
+    private double xOffset = 0;
+    private double yOffset = 0;
+
+    ObservableList<String> criteriaList = FXCollections.observableArrayList("", "Name", "Role");
+    ObservableList<String> newRoleList = FXCollections.observableArrayList("", "Admin", "Operator");
 
     @FXML
     public void fieldsClear(ActionEvent actionEvent) {
@@ -141,13 +151,13 @@ public class UserController {
         try {
             UserDAO.updateUser(newUserId.getText(), newName.getText(), newRole.getValue().toString());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Product update");
+            alert.setTitle("User update");
             alert.setHeaderText("Success message");
-            alert.setContentText("The product "+ userId.getText() + " was successfully updated!!");
+            alert.setContentText("The user " + userId.getText() + " was successfully updated!!");
             alert.showAndWait();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Product delete");
+            alert.setTitle("User update");
             alert.setHeaderText("Failure message");
             alert.setContentText("Problem occurred while updating user " + e);
             alert.showAndWait();
@@ -215,14 +225,14 @@ public class UserController {
     @FXML
     private void initialize() throws SQLException {
 
-
-        role.setItems(roleList);
         searchChoice.setItems(criteriaList);
         newRole.setItems(newRoleList);
         userIdColumn.setCellValueFactory(cellData -> cellData.getValue().userIdProperty());
         firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
         lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
         roleColumn.setCellValueFactory(cellData -> cellData.getValue().roleProperty());
+        contactColumn.setCellValueFactory(cellData -> cellData.getValue().contactNoProperty());
+        addressColumn.setCellValueFactory(cellData -> cellData.getValue().addressProperty());
 
         try {
 
@@ -272,31 +282,29 @@ public class UserController {
     }
 
 
+
     @FXML
-    private void addUser(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, NoSuchAlgorithmException {
+    public void addAction(ActionEvent event) throws IOException {
 
-//        MessageDigest md = MessageDigest.getInstance("MD5");
-//        byte[] messageDigest = md.digest( password.getText().getBytes());
-//        BigInteger number = new BigInteger(1,messageDigest);
-//        String hashtext = number.toString(16);
-
-        try {
-            UserDAO.addUser(userId.getText(), firstName.getText(), lastName.getText(), role.getValue().toString(), password.getText());
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Add user");
-            alert.setHeaderText("Success message");
-            alert.setContentText("The user " + userId.getText() + " was successfully added!!");
-            alert.showAndWait();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Failure message");
-            alert.setContentText("Problem occurred while adding the user" + e);
-            alert.showAndWait();
-            throw e;
-        }
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/createUser.fxml")));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        root.setOnMousePressed((MouseEvent e) -> {
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) -> {
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Add user");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
+
 
     @FXML
     private void backAction2(ActionEvent event) throws IOException {
@@ -308,11 +316,48 @@ public class UserController {
             stage = (Stage) backBtn2.getScene().getWindow();
             //load up OTHER FXML document
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 700, 400);
+            Scene scene = new Scene(root, 950, 550);
             stage.setScene(scene);
             stage.show();
         }
 
     }
+
+    @FXML
+    private void closeButtonAction() {
+        Stage stage = (Stage) userTable.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void minimizeAction() {
+        Stage stage = (Stage) userTable.getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+
+    @FXML
+    public void addUser(ActionEvent event) throws Exception {
+
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/createUser.fxml")));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        root.setOnMousePressed((MouseEvent e) -> {
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) -> {
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Add User");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.showAndWait();
+
+    }
+
 
 }

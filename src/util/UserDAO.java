@@ -23,7 +23,7 @@ public class UserDAO {
             User user = getUserFromResultSet(rsUser);
             return user;
         } catch (SQLException e) {
-            System.out.println("While searching an product with '" + searchByRole + "' id, an error occurred: " + e);
+            System.out.println("While searching an user with '" + searchByRole + "' id, an error occurred: " + e);
 
             throw e;
         }
@@ -50,6 +50,16 @@ public class UserDAO {
                 System.out.print("Error occurred while UPDATE Operation: " + e);
                 throw e;
             }
+        } else {
+
+            String updateStmt = "UPDATE user SET first_name='" + newName + "',first_name='" + newName + "' WHERE id = '" + userId + "'";
+            try {
+                DBUtil.dbExecuteUpdate(updateStmt);
+            } catch (SQLException e) {
+                System.out.print("Error occurred while UPDATE Operation: " + e);
+                throw e;
+            }
+
         }
     }
 
@@ -65,7 +75,7 @@ public class UserDAO {
             User user = getUserFromResultSet(rsUser);
             return user;
         } catch (SQLException e) {
-            System.out.println("While searching an product with '" + searchByName + "' id, an error occurred: " + e);
+            System.out.println("While searching an user with '" + searchByName + "' id, an error occurred: " + e);
             throw e;
         }
     }
@@ -102,6 +112,7 @@ public class UserDAO {
         }
     }
 
+
     public static ObservableList<User> searchUsersBYRole(String searchByRole) throws SQLException, ClassNotFoundException {
 
         String selectStmt = "SELECT * FROM user WHERE role='"+searchByRole+"'";
@@ -126,15 +137,17 @@ public class UserDAO {
             user.setLastName(rs.getString("last_name"));
             user.setRole(rs.getString("role"));
             user.setPassword(rs.getString("password"));
+            user.setContactNo(rs.getString("contact"));
+            user.setAddress(rs.getString("address"));
             userList.add(user);
         }
         return userList;
     }
 
 
-    public static void addUser(String id,String firstName,String lastName, String role, String password) throws SQLException, ClassNotFoundException {
+    public static void addUser(String firstName,String lastName, String role, String password, String contact, String address) throws SQLException, ClassNotFoundException {
 
-        String updateStmt = "INSERT INTO user(id,first_name,last_name,role,password) VALUES('"+id+"','"+firstName+"','"+lastName+"','"+role+"','"+password+"')";
+        String updateStmt = "INSERT INTO user(first_name,last_name,role,password,contact,address) VALUES('"+firstName+"','"+lastName+"','"+role+"','"+password+"','"+contact+"','"+address+"')";
         try {
             DBUtil.dbExecuteUpdate(updateStmt);
         } catch (SQLException e) {

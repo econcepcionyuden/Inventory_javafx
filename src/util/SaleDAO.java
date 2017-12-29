@@ -22,7 +22,7 @@ public class SaleDAO {
             Sale sale = getSaleFromResultSet(rsSale);
             return sale;
         } catch (SQLException e) {
-            System.out.println("While searching an product with '" + saleId + "' id, an error occurred: " + e);
+            System.out.println("While searching an sale  with '" + saleId + "' id, an error occurred: " + e);
 
             throw e;
         }
@@ -39,7 +39,7 @@ public class SaleDAO {
             Sale sale = getSaleFromResultSet(rsSale);
             return sale;
         } catch (SQLException e) {
-            System.out.println("While searching an product with '" + saleDate + "' id, an error occurred: " + e);
+            System.out.println("While searching an sale with '" + saleDate + "' id, an error occurred: " + e);
 
             throw e;
         }
@@ -72,7 +72,7 @@ public class SaleDAO {
             ObservableList<Client> clientList = getClientList(rsClients);
             return clientList;
         } catch (SQLException e) {
-            System.out.println("SQL select operation has been failed: " + e);
+            System.out.println("SQL SELECT operation has been failed: " + e);
             throw e;
         }
     }
@@ -86,7 +86,7 @@ public class SaleDAO {
             ObservableList<Sale> saleList = getSaleList(rsSales);
             return saleList;
         } catch (SQLException e) {
-            System.out.println("SQL select operation has been failed: " + e);
+            System.out.println("SQL SELECT operation has been failed: " + e);
             throw e;
         }
     }
@@ -101,7 +101,7 @@ public class SaleDAO {
             ObservableList<Sale> saleList = getSaleList(rsSales);
             return saleList;
         } catch (SQLException e) {
-            System.out.println("SQL select operation has been failed: " + e);
+            System.out.println("SQL SELECT operation has been failed: " + e);
 
             throw e;
         }
@@ -132,7 +132,8 @@ public class SaleDAO {
             sale.setQuantity(rs.getString("product_id"));
             sale.setAmount(rs.getString("amount"));
             sale.setQuantity(rs.getString("quantity"));
-
+            sale.setProductId(rs.getString("product_id"));
+            sale.setClientId(rs.getString("client_id"));
             saleList.add(sale);
         }
 
@@ -140,9 +141,9 @@ public class SaleDAO {
     }
 
 
-    public static int saleCount() throws SQLException, ClassNotFoundException {
+    public static int saleCount(String date) throws SQLException, ClassNotFoundException {
 
-        String selectStmt = "SELECT COUNT(id) AS noOfSales FROM sale";
+        String selectStmt = "SELECT COUNT(id) AS noOfSales FROM sale where transaction_date > '"+ date +"'";
         try {
             ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
             int count = 0;
@@ -152,34 +153,49 @@ public class SaleDAO {
             return count;
 
         } catch (SQLException e) {
-            System.out.print("Error occurred while UPDATE Operation: " + e);
+            System.out.print("Error occurred while SELECT Operation: " + e);
             throw e;
         }
     }
 
-    public static void sell(String id,String productId,String date, String amount, String quantity,String clientId) throws SQLException, ClassNotFoundException {
+    public static void sell(int paymentId,String productId,String date, String amount, String quantity,String clientId) throws SQLException, ClassNotFoundException {
 
-        String updateStmt = "INSERT INTO sale(id,transaction_date,amount,quantity,product_id,client_id) VALUES('"+id+"','"+date+"','"+amount+"','"+quantity+"','"+productId+"','"+clientId+"')";
+        String updateStmt = "INSERT INTO sale(payment_id,transaction_date,amount,quantity,product_id,client_id) VALUES('"+paymentId+"','"+date+"','"+amount+"','"+quantity+"','"+productId+"','"+clientId+"')";
         try {
             DBUtil.dbExecuteUpdate(updateStmt);
 
         } catch (SQLException e) {
-            System.out.print("Error occurred while inserting selling data: " + e);
+            System.out.print("Error occurred while inserting sales data: " + e);
             throw e;
         }
     }
 
 
-    public static ObservableList<Sale> totalSaleAmounts() throws SQLException, ClassNotFoundException {
+    public static ObservableList<Sale> totalSaleAmounts(String date) throws SQLException, ClassNotFoundException {
 
-        String selectStmt = "select * from sale";
+        String selectStmt = "select * from sale where transaction_date > '"+ date +"'";
         try {
             ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
             ObservableList<Sale> saleList = getSalesList(rsCount);
             return saleList;
 
         } catch (SQLException e) {
-            System.out.print("Error occurred: " + e);
+            System.out.print("Error occurred while SELECT Operation: " + e);
+            throw e;
+        }
+    }
+
+
+    public static ObservableList<Sale> previousTotalSaleAmounts(String previousDate, String date) throws SQLException, ClassNotFoundException {
+
+        String selectStmt = "select * from sale where transaction_date > '"+ previousDate +"' AND '"+ date +"' > transaction_date";
+        try {
+            ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
+            ObservableList<Sale> saleList = getSalesList(rsCount);
+            return saleList;
+
+        } catch (SQLException e) {
+            System.out.print("Error occurred while SELECT Operation: " + e);
             throw e;
         }
     }
@@ -199,7 +215,5 @@ public class SaleDAO {
         }
         return saleList;
     }
-
-
 
 }

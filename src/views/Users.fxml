@@ -1,60 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="804.0" style="-fx-background-color: #85C1E9;" stylesheets="@../Scenes/style.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.UserController">
    <children>
       <VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
-      <VBox layoutX="9.0" layoutY="87.0" prefHeight="198.0" prefWidth="80.0" spacing="12.0">
-         <children>
-            <Label prefHeight="57.0" prefWidth="80.0" text="First Name" />
-            <Label prefHeight="92.0" prefWidth="80.0" text="Last Name" />
-            <Label prefHeight="101.0" prefWidth="74.0" text="Role" />
-         </children>
-      </VBox>
-      <Separator layoutY="14.0" prefHeight="1.0" prefWidth="805.0" />
-      <Separator layoutX="206.0" layoutY="14.0" orientation="VERTICAL" prefHeight="469.0" prefWidth="7.0" />
-      <TableView fx:id="userTable" editable="true" layoutX="215.0" layoutY="121.0" prefHeight="304.0" prefWidth="500.0" stylesheets="@../Scenes/style.css" tableMenuButtonVisible="true">
+      <VBox layoutX="9.0" layoutY="87.0" prefHeight="198.0" prefWidth="80.0" spacing="12.0" />
+      <TableView fx:id="userTable" editable="true" layoutX="13.0" layoutY="138.0" prefHeight="287.0" prefWidth="702.0" stylesheets="@../Scenes/style.css" tableMenuButtonVisible="true">
          <columns> 
             <TableColumn fx:id="userIdColumn" prefWidth="57.0" text="Id" />
-            <TableColumn fx:id="firstNameColumn" prefWidth="156.0" text="First Name" />
-            <TableColumn fx:id="lastNameColumn" prefWidth="114.0" text="Last Name" />
-            <TableColumn fx:id="roleColumn" prefWidth="152.0" text="Role" />
+            <TableColumn fx:id="firstNameColumn" prefWidth="96.0" text="First Name" />
+            <TableColumn fx:id="lastNameColumn" prefWidth="121.0" text="Last Name" />
+            <TableColumn fx:id="roleColumn" prefWidth="88.0" text="Role" />
+            <TableColumn fx:id="contactColumn" prefWidth="116.0" text="Contact" />
+            <TableColumn fx:id="addressColumn" prefWidth="212.0" text="Address" />
          </columns>
       </TableView>
-      <Label layoutX="12.0" layoutY="42.0" text="User ID" />
-      <ChoiceBox fx:id="role" layoutX="95.0" layoutY="229.0" prefHeight="26.0" prefWidth="96.0" />
-      <JFXTextField fx:id="userId" layoutX="100.0" layoutY="25.0" prefHeight="26.0" prefWidth="90.0" />
-      <JFXTextField fx:id="firstName" layoutX="98.0" layoutY="81.0" prefHeight="26.0" prefWidth="90.0" />
-      <JFXTextField fx:id="lastName" layoutX="96.0" layoutY="140.0" prefHeight="26.0" prefWidth="90.0" />
-      <JFXButton fx:id="addUser" layoutX="100.0" layoutY="365.0" onAction="#addUser" prefHeight="28.0" prefWidth="90.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Add User" textFill="WHITE" />
-      <JFXButton fx:id="backBtn2" layoutX="6.0" layoutY="435.0" onAction="#backAction2" prefHeight="30.0" prefWidth="180.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Back " textFill="#fcfafa" />
-      <Label layoutX="11.0" layoutY="313.0" text="Password" />
-      <JFXPasswordField fx:id="password" layoutX="92.0" layoutY="298.0" prefHeight="26.0" prefWidth="96.0" />
+      <JFXButton fx:id="addUser" layoutX="433.0" layoutY="436.0" onAction="#addUser" prefHeight="28.0" prefWidth="90.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Add User" textFill="WHITE" />
+      <JFXButton fx:id="backBtn2" layoutX="6.0" layoutY="435.0" onAction="#backAction2" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Back " textFill="#fcfafa" />
       <JFXButton layoutX="572.0" layoutY="437.0" onAction="#deleteRow" prefHeight="28.0" prefWidth="141.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Delete User" textFill="#fcf9f9" />
       <JFXButton fx:id="refresh" layoutX="219.0" layoutY="435.0" onAction="#searchAllUsers" prefHeight="28.0" prefWidth="160.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Refresh" textFill="#fffefe" />
-      <JFXButton fx:id="reset" layoutX="3.0" layoutY="366.0" onAction="#fieldsClear" prefHeight="28.0" prefWidth="87.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Reset" textFill="#f5f0f0" />
-      <JFXButton fx:id="searchBtn" layoutX="600.0" layoutY="83.0" onAction="#searchUsers" prefHeight="28.0" prefWidth="114.0" style="-fx-background-color: #3498DB; -fx-border-color: #fffdfd;" text="Search" textFill="WHITE" />
-      <Label layoutX="215.0" layoutY="89.0" text="Search By :" />
-      <ChoiceBox fx:id="searchChoice" layoutX="303.0" layoutY="84.0" prefWidth="150.0" />
-      <TextField fx:id="searchField" layoutX="463.0" layoutY="84.0" prefHeight="26.0" prefWidth="132.0" />
-      <Label layoutX="240.0" layoutY="45.0" text="User ID" />
-      <Label layoutX="334.0" layoutY="45.0" text="New Name" />
-      <JFXButton fx:id="updateProductBtn" layoutX="624.0" layoutY="17.0" onAction="#updateUser" prefHeight="25.0" prefWidth="89.0" style="-fx-background-color: #3498DB; -fx-border-color: #FDFEFE;" text="Update" textFill="#ebe3e3" />
-      <JFXTextField fx:id="newName" layoutX="325.0" layoutY="11.0" prefHeight="32.0" prefWidth="92.0" />
-      <JFXTextField fx:id="newUserId" layoutX="223.0" layoutY="17.0" prefHeight="6.0" prefWidth="94.0" />
-      <Label layoutX="456.0" layoutY="45.0" text="New Role" />
-      <ChoiceBox fx:id="newRole" layoutX="429.0" layoutY="17.0" prefHeight="26.0" prefWidth="115.0" />
-      <JFXButton fx:id="reset1" layoutX="554.0" layoutY="17.0" onAction="#fieldsClear2" prefHeight="6.0" prefWidth="64.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Reset" textFill="#f5f0f0" />
+      <JFXButton fx:id="searchBtn" layoutX="600.0" layoutY="99.0" onAction="#searchUsers" prefHeight="28.0" prefWidth="114.0" style="-fx-background-color: #3498DB; -fx-border-color: #fffdfd;" text="Search" textFill="WHITE" />
+      <Label layoutX="215.0" layoutY="105.0" text="Search By :" />
+      <ChoiceBox fx:id="searchChoice" layoutX="303.0" layoutY="100.0" prefWidth="150.0" />
+      <TextField fx:id="searchField" layoutX="463.0" layoutY="100.0" prefHeight="26.0" prefWidth="132.0" />
+      <Label layoutX="240.0" layoutY="72.0" text="User ID" />
+      <Label layoutX="341.0" layoutY="73.0" text="New Name" />
+      <JFXButton fx:id="updateProductBtn" layoutX="624.0" layoutY="44.0" onAction="#updateUser" prefHeight="25.0" prefWidth="89.0" style="-fx-background-color: #3498DB; -fx-border-color: #FDFEFE;" text="Update" textFill="#ebe3e3" />
+      <JFXTextField fx:id="newName" layoutX="325.0" layoutY="38.0" prefHeight="32.0" prefWidth="92.0" />
+      <JFXTextField fx:id="newUserId" layoutX="215.0" layoutY="44.0" prefHeight="26.0" prefWidth="102.0" />
+      <Label layoutX="456.0" layoutY="72.0" text="New Role" />
+      <ChoiceBox fx:id="newRole" layoutX="429.0" layoutY="44.0" prefHeight="26.0" prefWidth="115.0" />
+      <JFXButton fx:id="reset1" layoutX="554.0" layoutY="44.0" onAction="#fieldsClear2" prefHeight="6.0" prefWidth="64.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Reset" textFill="#f5f0f0" />
+      <ImageView fitHeight="18.0" fitWidth="26.0" layoutX="707.0" layoutY="11.0" onMouseClicked="#closeButtonAction" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/close.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="680.0" layoutY="10.0" onMouseClicked="#minimizeAction" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/minimize.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

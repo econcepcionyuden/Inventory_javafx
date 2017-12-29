@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
@@ -10,119 +17,207 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="396.0" prefWidth="715.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="544.0" prefWidth="990.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AdminController">
    <children>
-      <Separator prefHeight="141.0" prefWidth="715.0" />
+      <Separator prefHeight="141.0" prefWidth="951.0" />
       <Separator orientation="VERTICAL" prefHeight="394.0" prefWidth="263.0" />
       <Label alignment="CENTER" prefHeight="69.0" prefWidth="131.0" style="-fx-border-color: #BFC9CA; -fx-background-color: #3498DB; -fx-text-fill: #FDFEFE;" text="D A S H B O A R D" />
-      <ImageView fitHeight="38.0" fitWidth="61.0" layoutX="556.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="38.0" fitWidth="61.0" layoutX="700.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Scenes/654853-user-men-2-512.png" />
          </image>
       </ImageView>
-      <Label layoutX="600.0" layoutY="1.0" prefHeight="38.0" prefWidth="78.0" text="A D M I N" textFill="#f5f3f3" />
-      <JFXButton fx:id="logoutButton" buttonType="RAISED" layoutX="601.0" layoutY="36.0" onAction="#handleNavigation" prefHeight="28.0" prefWidth="68.0" style="-fx-border-color: #FDFEFE;" text="Logout" textFill="#fcfafa" />
-      <JFXButton fx:id="productsBtn" layoutY="71.0" onAction="#handleNavigation" prefHeight="46.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="    PRODUCTS" textFill="#f8f6f6" />
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="13.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+      <JFXButton fx:id="productsBtn" layoutY="71.0" onAction="#handleNavigation" prefHeight="73.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="    INVENTORY" textFill="#f8f6f6" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="12.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Scenes/production-icon-19.png" />
          </image>
       </ImageView>
-      <JFXButton fx:id="salesBtn" layoutY="117.0" onAction="#handleNavigation" prefHeight="46.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="  SALES" textFill="#f8f6f6" />
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="13.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true">
+      <JFXButton fx:id="salesBtn" layoutY="142.0" onAction="#handleNavigation" prefHeight="69.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="  SALES" textFill="#f8f6f6" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="14.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Scenes/Business_Office_Solid_income_sales_increase_profit-512.png" />
          </image>
       </ImageView>
-      <JFXButton fx:id="purchasesBtn" layoutY="161.0" onAction="#handleNavigation" prefHeight="48.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="    PURCHASES" textFill="#f8f6f6" />
-      <ImageView fitHeight="36.0" fitWidth="24.0" layoutX="10.0" layoutY="173.0" pickOnBounds="true" preserveRatio="true">
+      <JFXButton fx:id="purchasesBtn" layoutY="206.0" onAction="#handleNavigation" prefHeight="69.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="    PURCHASES" textFill="#f8f6f6" />
+      <ImageView fitHeight="36.0" fitWidth="24.0" layoutX="10.0" layoutY="232.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Scenes/shopping_cart.png" />
          </image>
       </ImageView>
-      <JFXButton fx:id="usersBtn" layoutY="209.0" onAction="#handleNavigation" prefHeight="46.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text=" USERS" textFill="#f8f6f6" />
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="11.0" layoutY="220.0" pickOnBounds="true" preserveRatio="true">
+      <JFXButton fx:id="usersBtn" layoutY="274.0" onAction="#handleNavigation" prefHeight="68.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text=" USERS" textFill="#f8f6f6" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="15.0" layoutY="295.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Scenes/user-new-480.png" />
          </image>
       </ImageView>
-      <JFXButton fx:id="reportsBtn" layoutY="255.0" onAction="#handleNavigation" prefHeight="46.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="   REPORTS" textFill="#f8f6f6" />
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+      <JFXButton fx:id="reportsBtn" layoutY="337.0" onAction="#handleNavigation" prefHeight="68.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="   REPORTS" textFill="#f8f6f6" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="15.0" layoutY="358.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Scenes/All_reports.png" />
          </image>
       </ImageView>
-      <Label layoutX="173.0" layoutY="257.0" style="-fx-font-size: 20;" text="USERS">
+      <Label layoutX="134.0" layoutY="126.0" style="-fx-font-size: 8;" text="IN GOOD STATUS">
          <effect>
             <Reflection />
          </effect></Label>
-      <Label layoutX="285.0" layoutY="256.0" style="-fx-font-size: 20;" text="PRODUCTS">
+      <Label layoutX="368.0" layoutY="251.0" style="-fx-font-size: 20;">
          <effect>
             <Reflection />
          </effect></Label>
-      <Label layoutX="434.0" layoutY="256.0" style="-fx-font-size: 20;" text="SALES">
+      <Label layoutX="141.0" layoutY="295.0" style="-fx-font-size: 8;" text="SALES">
          <effect>
             <Reflection />
          </effect></Label>
-      <Label layoutX="543.0" layoutY="257.0" style="-fx-font-size: 20;" text="PURCHASES">
+      <Label layoutX="140.0" layoutY="343.0" style="-fx-font-size: 8;" text="PURCHASES">
          <effect>
             <Reflection />
          </effect></Label>
-      <TextField fx:id="productCount" layoutX="300.0" layoutY="190.0" prefHeight="14.0" prefWidth="56.0" style="-fx-background-color: #85C1E9; -fx-font-size: 20;">
+      <TextField fx:id="saleCount" layoutX="135.0" layoutY="268.0" prefHeight="16.0" prefWidth="56.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
          <effect>
             <DropShadow />
          </effect></TextField>
-      <TextField fx:id="saleCount" layoutX="433.0" layoutY="190.0" prefHeight="16.0" prefWidth="56.0" style="-fx-background-color: #85C1E9; -fx-font-size: 20;">
+      <TextField fx:id="purchaseCount" layoutX="136.0" layoutY="314.0" prefHeight="20.0" prefWidth="54.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
          <effect>
             <DropShadow />
          </effect></TextField>
-      <TextField fx:id="purchaseCount" layoutX="580.0" layoutY="190.0" prefHeight="28.0" prefWidth="56.0" style="-fx-background-color: #85C1E9; -fx-font-size: 20;">
+      <TextField fx:id="expiredProductCount" layoutX="136.0" layoutY="142.0" prefHeight="2.0" prefWidth="48.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
          <effect>
             <DropShadow />
          </effect></TextField>
-      <TextField fx:id="userCount" layoutX="177.0" layoutY="190.0" prefHeight="28.0" prefWidth="56.0" style="-fx-background-color: #85C1E9; -fx-font-size: 20;">
-         <effect>
-            <DropShadow />
-         </effect></TextField>
-      <JFXButton fx:id="vendorsBtn" layoutY="300.0" onAction="#handleNavigation" prefHeight="46.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="  VENDORS" textFill="#f8f6f6" />
-      <ImageView fitHeight="30.0" fitWidth="38.0" layoutX="5.0" layoutY="305.0" pickOnBounds="true" preserveRatio="true">
+      <JFXButton fx:id="vendorsBtn" layoutY="404.0" onAction="#handleNavigation" prefHeight="76.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="  VENDORS" textFill="#f8f6f6" />
+      <ImageView fitHeight="30.0" fitWidth="38.0" layoutX="7.0" layoutY="424.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Scenes/vendors.png" />
          </image>
       </ImageView>
-      <JFXButton fx:id="clientsBtn" layoutY="346.0" onAction="#handleNavigation" prefHeight="48.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="  CLIENTS" textFill="#f8f6f6" />
-      <ImageView fitHeight="26.0" fitWidth="23.0" layoutX="14.0" layoutY="358.0" pickOnBounds="true" preserveRatio="true">
+      <JFXButton fx:id="clientsBtn" layoutY="475.0" onAction="#handleNavigation" prefHeight="68.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="  CLIENTS" textFill="#f8f6f6" />
+      <ImageView fitHeight="26.0" fitWidth="23.0" layoutX="13.0" layoutY="498.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Scenes/CLIENTS.png" />
          </image>
       </ImageView>
-      <Label layoutX="173.0" layoutY="91.0" prefHeight="28.0" prefWidth="377.0" style="-fx-font-size: 22;" text="Organization's Inventory Status" textAlignment="CENTER" />
-      <TextField fx:id="totalExpenseField" layoutX="158.0" layoutY="320.0" prefHeight="26.0" prefWidth="112.0" style="-fx-background-color: #85C1E9; -fx-font-size: 16;">
+      <TextField fx:id="totalExpenseField" layoutX="136.0" layoutY="399.0" prefHeight="20.0" prefWidth="54.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
          <effect>
             <DropShadow />
          </effect></TextField>
-      <TextField fx:id="totalIncomeField" layoutX="309.0" layoutY="321.0" prefHeight="30.0" prefWidth="131.0" style="-fx-background-color: #85C1E9; -fx-font-size: 16;">
+      <TextField fx:id="totalIncomeField" layoutX="136.0" layoutY="446.0" prefHeight="20.0" prefWidth="54.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
          <effect>
             <DropShadow />
          </effect></TextField>
-      <TextField fx:id="grossProfitField" layoutX="524.0" layoutY="320.0" prefHeight="28.0" prefWidth="131.0" style="-fx-background-color: #85C1E9; -fx-font-size: 16;">
+      <TextField fx:id="grossProfitField" layoutX="135.0" layoutY="498.0" prefHeight="20.0" prefWidth="54.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
          <effect>
             <DropShadow />
          </effect></TextField>
-      <Label layoutX="546.0" layoutY="358.0" style="-fx-font-size: 15;" text="Gross Profit">
+      <Label layoutX="136.0" layoutY="527.0" style="-fx-font-size: 8;" text="Gross Profit">
          <effect>
             <Reflection />
          </effect>
       </Label>
-      <Label layoutX="347.0" layoutY="360.0" style="-fx-font-size: 15;" text="Income">
+      <Label layoutX="140.0" layoutY="474.0" style="-fx-font-size: 8;" text="Income">
          <effect>
             <Reflection />
          </effect>
       </Label>
-      <Label layoutX="178.0" layoutY="355.0" style="-fx-font-size: 15;" text="Expenses">
+      <Label layoutX="137.0" layoutY="425.0" style="-fx-font-size: 8;" text="Expenses">
          <effect>
             <Reflection />
          </effect>
       </Label>
+      <TextField fx:id="goodProductCount" layoutX="135.0" layoutY="103.0" prefHeight="3.0" prefWidth="48.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
+         <effect>
+            <DropShadow />
+         </effect>
+      </TextField>
+      <Label layoutX="137.0" layoutY="166.0" style="-fx-font-size: 8;" text="EXPIRED">
+         <effect>
+            <Reflection />
+         </effect>
+      </Label>
+      <PieChart fx:id="inventoryPieChart" layoutX="211.0" layoutY="94.0" prefHeight="187.0" prefWidth="344.0" title="Inventory Status" />
+      <Label layoutX="362.0" layoutY="516.0" style="-fx-font-size: 8;" text="Previous Month Profit">
+         <effect>
+            <Reflection />
+         </effect>
+      </Label>
+      <Label layoutX="222.0" layoutY="518.0" style="-fx-font-size: 8;" text="Profit Progress">
+         <effect>
+            <Reflection />
+         </effect>
+      </Label>
+      <TextField fx:id="previousProfit" layoutX="460.0" layoutY="513.0" prefHeight="20.0" prefWidth="64.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
+         <effect>
+            <DropShadow />
+         </effect>
+      </TextField>
+      <TextField fx:id="profitProgress" layoutX="293.0" layoutY="513.0" prefHeight="20.0" prefWidth="60.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
+         <effect>
+            <DropShadow />
+         </effect>
+      </TextField>
+      <Label layoutX="612.0" layoutY="521.0" style="-fx-font-size: 8;" text="Inventory Turnover">
+         <effect>
+            <Reflection />
+         </effect>
+      </Label>
+      <TextField fx:id="assetTurnover" layoutX="694.0" layoutY="515.0" prefHeight="12.0" prefWidth="84.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
+         <effect>
+            <DropShadow />
+         </effect>
+      </TextField>
+      <TextField fx:id="damagedProductCount" layoutX="137.0" layoutY="179.0" prefHeight="0.0" prefWidth="46.0" style="-fx-background-color: #85C1E9; -fx-font-size: 8;">
+         <effect>
+            <DropShadow />
+         </effect>
+      </TextField>
+      <Label layoutX="137.0" layoutY="202.0" style="-fx-font-size: 8;" text="DAMAGED">
+         <effect>
+            <Reflection />
+         </effect>
+      </Label>
+      <LineChart fx:id="inventoryLineChart" layoutX="550.0" layoutY="97.0" prefHeight="177.0" prefWidth="389.0" title="Inventory Turnover">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" fx:id="x" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="y" side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <LineChart fx:id="profitLineChart" layoutX="201.0" layoutY="335.0" prefHeight="177.0" prefWidth="337.0" title="Profit Chart">
+        <xAxis>
+          <CategoryAxis fx:id="time" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="profit" side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <AreaChart fx:id="profitAndTurnover" layoutX="552.0" layoutY="336.0" prefHeight="177.0" prefWidth="389.0" title="Damaged and Toatal Inventory">
+        <xAxis>
+          <CategoryAxis fx:id="month" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="inventory" side="LEFT" />
+        </yAxis>
+      </AreaChart>
+      <Label layoutX="134.0" layoutY="74.0" text="INVENTORY" />
+      <Label layoutX="136.0" layoutY="239.0" prefHeight="18.0" prefWidth="108.0" text="TRANSACTIONS" />
+      <MenuButton layoutX="744.0" layoutY="21.0" mnemonicParsing="false" text="A D M I N">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Profile" />
+           <MenuItem fx:id="posItem" mnemonicParsing="false" onAction="#handleNavigation" text="POS" />
+          <MenuItem fx:id="logoutItem" mnemonicParsing="false" onAction="#handleNavigation" text="Logout" />
+
+        </items>
+      </MenuButton>
+      <ImageView fitHeight="30.0" fitWidth="18.0" layoutX="906.0" layoutY="14.0" onMouseClicked="#closeButtonAction" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/close.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="875.0" layoutY="15.0" onMouseClicked="#minimizeAction" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/minimize.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

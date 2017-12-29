@@ -21,7 +21,7 @@ public class VendorDAO {
             Vendor vendor = getVendorFromResultSet(rsVendor);
             return vendor;
         } catch (SQLException e) {
-            System.out.println("While searching an product with '" + searchByCompany + "' id, an error occurred: " + e);
+            System.out.println("While searching an vendor with '" + searchByCompany + "' id, an error occurred: " + e);
             throw e;
         }
     }
@@ -38,7 +38,7 @@ public class VendorDAO {
             Vendor vendor = getVendorFromResultSet(rsVendor);
             return vendor;
         } catch (SQLException e) {
-            System.out.println("While searching an product with '" + searchByName + "' id, an error occurred: " + e);
+            System.out.println("While searching an vendor with '" + searchByName + "' id, an error occurred: " + e);
             throw e;
         }
     }
@@ -115,36 +115,7 @@ public class VendorDAO {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //INSERT an user
+    //INSERT a vendor
     public static void addVendor(String id,String name,String company, String address, String contact) throws SQLException, ClassNotFoundException {
         //Declare a DELETE statement
         String updateStmt = "INSERT INTO vendor(id,name,company,address,contact_no) VALUES('"+id+"','"+name+"','"+company+"','"+address+"','"+contact+"')";

@@ -94,6 +94,22 @@ public class ProductDAO {
     }
 
 
+    public static Product searchProductByTitle(String title) throws SQLException, ClassNotFoundException {
+
+        String selectStmt = "SELECT * FROM product WHERE product.title = '" + title + "'";
+
+        try {
+            ResultSet rsEmp = DBUtil.dbExecuteQuery(selectStmt);
+            Product product = getProductFromResultSet(rsEmp);
+            return product;
+        } catch (SQLException e) {
+            System.out.println("While searching an product with '" + title + "' id, an error occurred: " + e);
+            //Return exception
+            throw e;
+        }
+    }
+
+
     public static ObservableList<Product> searchProductsByType(String type) throws SQLException, ClassNotFoundException {
 
         String selectStmt = "SELECT * FROM product WHERE type='" + type + "'";
@@ -121,15 +137,47 @@ public class ProductDAO {
             product.setDescription(rs.getString("description"));
             product.setUnitPrice(rs.getString("unit_price"));
             product.setQuantity(rs.getString("quantity"));
+            product.setAddedDate(rs.getString("added_date"));
+            product.setExpireDate(rs.getString("expire_date"));
             product.setProductStatus(rs.getString("status"));
             product.setReOrderPoint(rs.getString("reorder_point"));
             product.setSurplusPoint(rs.getString("surplus_point"));
+
             productList.add(product);
         }
 
         return productList;
     }
 
+
+    public static void updateProductStatus(String productId) throws SQLException, ClassNotFoundException {
+
+        String status = "expired";
+        String updateStmt = "UPDATE product SET status = '" + status + "'  WHERE id = '" + productId + "'";
+        try {
+            DBUtil.dbExecuteUpdate(updateStmt);
+        } catch (SQLException e) {
+            System.out.print("Error occurred while UPDATE Operation: " + e);
+            throw e;
+        }
+
+    }
+
+    public static void updateProductQuantity(String title, String quantity) throws SQLException, ClassNotFoundException {
+        String updateStmt = "UPDATE product SET quantity = '" + quantity + "'  WHERE title = '" + title + "'";
+        try {
+            DBUtil.dbExecuteUpdate(updateStmt);
+        } catch (SQLException e) {
+            System.out.print("Error occurred while UPDATE Operation: " + e);
+            throw e;
+        }
+    }
+
+//    public static void updateProductQuantity(String title, String unitPrice, String quantity, String status) throws SQLException, ClassNotFoundException {
+//
+//        String updateStmt = "UPDATE product SET quantity = '" + quantity + "'  WHERE id = '" + productId + "'";
+//
+//    }
 
     public static void updateProduct(String productId, String unitPrice, String quantity, String status) throws SQLException, ClassNotFoundException {
 
@@ -212,9 +260,12 @@ public class ProductDAO {
     }
 
 
-    public static int productCount() throws SQLException, ClassNotFoundException {
 
-        String selectStmt = "SELECT COUNT(id) AS noOfProducts FROM product";
+
+    public static int damagedProductCount() throws SQLException, ClassNotFoundException {
+
+        String status = "damaged";
+        String selectStmt = "SELECT COUNT(id) AS noOfProducts FROM product where status='"+status+"'";
         try {
             ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
             int count = 0;
@@ -224,7 +275,46 @@ public class ProductDAO {
             return count;
 
         } catch (SQLException e) {
-            System.out.print("Error occurred while UPDATE Operation: " + e);
+            System.out.print("Error occurred while SELECT Operation: " + e);
+            throw e;
+        }
+    }
+
+
+    public static int expiredProductCount() throws SQLException, ClassNotFoundException {
+
+        String status = "expired";
+        String selectStmt = "SELECT COUNT(id) AS noOfProducts FROM product where status='"+status+"'";
+        try {
+            ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
+            int count = 0;
+            if (rsCount.next()) {
+                count = rsCount.getInt(1);
+            }
+            return count;
+
+        } catch (SQLException e) {
+            System.out.print("Error occurred while SELECT Operation: " + e);
+            throw e;
+        }
+    }
+
+
+
+    public static int productCount() throws SQLException, ClassNotFoundException {
+
+        String status = "good";
+        String selectStmt = "SELECT COUNT(id) AS noOfProducts FROM product where status='"+status+"'";
+        try {
+            ResultSet rsCount = DBUtil.dbExecuteQuery(selectStmt);
+            int count = 0;
+            if (rsCount.next()) {
+                count = rsCount.getInt(1);
+            }
+            return count;
+
+        } catch (SQLException e) {
+            System.out.print("Error occurred while SELECT Operation: " + e);
             throw e;
         }
     }
@@ -252,9 +342,9 @@ public class ProductDAO {
     }
 
 
-    public static void insertProduct(String id, String title, String type, String description, String unit_price, String quantity, String status, String reorder, String surplus) throws SQLException, ClassNotFoundException {
+    public static void insertProduct(String id, String title, String type, String description, String unit_price, String quantity, String status, String reorder, String surplus, String date, String expireDate) throws SQLException, ClassNotFoundException {
 
-        String updateStmt = "INSERT INTO product(id,title, type, description, unit_price, quantity, status,reorder_point,surplus_point) VALUES('" + id + "','" + title + "', '" + type + "','" + description + "', '" + unit_price + "', '" + quantity + "', '" + status + "','" + reorder + "','" + surplus + "')";
+        String updateStmt = "INSERT INTO product(id,title, type, description, unit_price, quantity, status,reorder_point,surplus_point,added_date,expire_date) VALUES('" + id + "','" + title + "', '" + type + "','" + description + "', '" + unit_price + "', '" + quantity + "', '" + status + "','" + reorder + "','" + surplus + "','" + date + "','" + expireDate + "')";
         try {
             DBUtil.dbExecuteUpdate(updateStmt);
         } catch (SQLException e) {
@@ -273,7 +363,7 @@ public class ProductDAO {
             return productList;
 
         } catch (SQLException e) {
-            System.out.print("Error occurred while UPDATE Operation: " + e);
+            System.out.print("Error occurred while SELECT Operation: " + e);
             throw e;
         }
     }

@@ -13,6 +13,8 @@ public class User {
     private StringProperty lastName;
     private StringProperty role;
     private StringProperty password;
+    private StringProperty contactNo;
+    private StringProperty address;
 
 
     public User() {
@@ -21,6 +23,32 @@ public class User {
         this.lastName = new SimpleStringProperty();
         this.role = new SimpleStringProperty();
         this.password = new SimpleStringProperty();
+        this.contactNo = new SimpleStringProperty();
+        this.address = new SimpleStringProperty();
+    }
+
+    public String getContactNo() {
+        return contactNo.get();
+    }
+
+    public StringProperty contactNoProperty() {
+        return contactNo;
+    }
+
+    public void setContactNo(String contactNo) {
+        this.contactNo.set(contactNo);
+    }
+
+    public String getAddress() {
+        return address.get();
+    }
+
+    public StringProperty addressProperty() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address.set(address);
     }
 
     public String getUserId() {

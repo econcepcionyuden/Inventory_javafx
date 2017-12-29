@@ -24,7 +24,7 @@ public class ClientDAO {
             Client client = getClientFromResultSet(rsClient);
             return client;
         } catch (SQLException e) {
-            System.out.println("While searching an product with '" + searchByCompany + "' id, an error occurred: ");
+            System.out.println("While searching the client with '" + searchByCompany + "' company, an error occurred: ");
             throw e;
         }
     }

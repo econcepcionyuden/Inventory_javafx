@@ -8,12 +8,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import models.Client;
 import models.Product;
 import models.Purchase;
 import models.Vendor;
 import org.controlsfx.control.Notifications;
+import util.ClientDAO;
 import util.ProductDAO;
 import util.PurchaseDAO;
 import util.VendorDAO;
@@ -29,8 +34,6 @@ import java.time.format.DateTimeFormatter;
  */
 public class PurchaseController {
 
-    ObservableList<String> vendorList = FXCollections.observableArrayList("", "V001", "V002", "V003");
-    ObservableList<String> productList = FXCollections.observableArrayList("", "G001", "G002", "G003", "G004", "G005");
     ObservableList<String> criteriaList = FXCollections.observableArrayList("", "Date", "ID");
 
     @FXML
@@ -60,15 +63,21 @@ public class PurchaseController {
     @FXML
     private TableColumn<Purchase, String> transactionDateColumn;
     @FXML
+    private TableColumn<Purchase, String> productColumn;
+    @FXML
+    private TableColumn<Purchase, String> supplierColumn;
+    @FXML
     private TableColumn<Purchase, String> purchasingPriceColumn;
     @FXML
     private TableColumn<Purchase, String> quantityColumn;
 
 
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDateTime now = LocalDateTime.now();
     String date = dtf.format(now);
 
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     @FXML
     public void fieldsClear(ActionEvent actionEvent) {
@@ -106,9 +115,9 @@ public class PurchaseController {
             } catch (SQLException e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Product delete");
+                alert.setTitle("Search purchases");
                 alert.setHeaderText("Failure message");
-                alert.setContentText("Error occurred while getting product information from DB" + e);
+                alert.setContentText("Error occurred while getting purchase information from DB" + e);
                 alert.showAndWait();
                 throw e;
             }
@@ -121,9 +130,9 @@ public class PurchaseController {
             } catch (SQLException e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Product delete");
+                alert.setTitle("Search purchases");
                 alert.setHeaderText("Failure message");
-                alert.setContentText("Error occurred while getting product information from DB" + e);
+                alert.setContentText("Error occurred while getting purchase information from DB" + e);
                 alert.showAndWait();
                 throw e;
             }
@@ -143,7 +152,7 @@ public class PurchaseController {
             populatePurchases(purchaseData);
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Product delete");
+            alert.setTitle("Loading purchases");
             alert.setHeaderText("Failure message");
             alert.setContentText("Error occurred while refreshing" + e);
             alert.showAndWait();
@@ -158,9 +167,9 @@ public class PurchaseController {
             populatePurchase(purchase);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Product delete");
+            alert.setTitle("Purchase search");
             alert.setHeaderText("Failure message");
-            alert.setContentText("This product does not exist!");
+            alert.setContentText("This transaction does not exist!");
             alert.showAndWait();
         }
     }
@@ -185,13 +194,29 @@ public class PurchaseController {
     @FXML
     private void initialize() throws SQLException, ClassNotFoundException {
 
-        productId.setItems(productList);
-        vendorId.setItems(vendorList);
+
+        ObservableList<Product> productsData = ProductDAO.searchProducts();
+        ObservableList<Vendor> vendorsData = VendorDAO.searchAllVendors();
+
+        String productIds[] = new String[productsData.size()];
+        for (int i = 0; i < productsData.size(); i++) {
+            productIds[i] = productsData.get(i).getProductId();
+        }
+        String vendorIds[] = new String[vendorsData.size()];
+        for (int i = 0; i < vendorsData.size(); i++) {
+            vendorIds[i] = vendorsData.get(i).getVendorId();
+        }
+
+        ObservableList<String> productList = FXCollections.observableArrayList(productIds);
+        ObservableList<String> vendorList = FXCollections.observableArrayList(vendorIds);
+
         searchChoice.setItems(criteriaList);
         purchaseIdColumn.setCellValueFactory(cellData -> cellData.getValue().purchaseIdProperty());
         transactionDateColumn.setCellValueFactory(cellData -> cellData.getValue().transaction_dateProperty());
         purchasingPriceColumn.setCellValueFactory(cellData -> cellData.getValue().amountProperty());
         quantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityProperty());
+        supplierColumn.setCellValueFactory(cellData -> cellData.getValue().vendorIdProperty());
+        productColumn.setCellValueFactory(cellData -> cellData.getValue().productIdProperty());
 
         try {
 
@@ -200,7 +225,7 @@ public class PurchaseController {
             populatePurchases(purchaseData);
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Product delete");
+            alert.setTitle("Loading purchases");
             alert.setHeaderText("Failure message");
             alert.setContentText("Error occurred while getting results from DB");
             alert.showAndWait();
@@ -249,6 +274,28 @@ public class PurchaseController {
 
     }
 
+    @FXML
+    public void addAction(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/createPurchase.fxml")));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        root.setOnMousePressed((MouseEvent e) -> {
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) -> {
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Create Purchase");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
 
     @FXML
     private void purchase(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
@@ -259,7 +306,7 @@ public class PurchaseController {
 
 
         try {
-            PurchaseDAO.purchase(insertPurchaseId.getText(), productId.getValue().toString(), date, amount.getText(), quantity.getText(), vendorId.getValue().toString());
+            PurchaseDAO.purchase(productId.getValue().toString(), date, amount.getText(), quantity.getText(), vendorId.getValue().toString());
             ProductDAO.updateProductAfterPurchasing(productId.getValue().toString(), newQuantityString);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Add purchase");
@@ -284,11 +331,23 @@ public class PurchaseController {
         if (event.getSource() == backBtn) {
             stage = (Stage) backBtn.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 700, 400);
+            Scene scene = new Scene(root, 950, 550);
             stage.setScene(scene);
             stage.show();
         }
 
+    }
+
+    @FXML
+    private void closeButtonAction() {
+        Stage stage = (Stage) purchaseTable.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void minimizeAction() {
+        Stage stage = (Stage) purchaseTable.getScene().getWindow();
+        stage.setIconified(true);
     }
 
 }
