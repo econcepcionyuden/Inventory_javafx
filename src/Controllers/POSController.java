@@ -21,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -32,6 +33,8 @@ import util.PaymentDAO;
 import util.ProductDAO;
 import util.SaleDAO;
 
+import javax.swing.text.html.ImageView;
+
 public class POSController {
 
     @FXML
@@ -42,6 +45,8 @@ public class POSController {
     private TableView<Item> listTableView;
     @FXML
     private MenuItem logoutItem;
+    @FXML
+    private javafx.scene.image.ImageView backImage;
     @FXML
     private MenuButton menuButton;
     @FXML
@@ -114,10 +119,9 @@ public class POSController {
         String role = LoginController.sessionRole;
 
         if (role.equals("Operator")) {
-            backBtn2.setVisible(false);
+            backImage.setVisible(false);
             menuButton.setText(role);
         } else {
-
             menuButton.setVisible(false);
         }
 
@@ -520,17 +524,16 @@ public class POSController {
     }
 
     @FXML
-    private void backAction2(ActionEvent event) throws IOException {
+    private void backAction2() throws IOException {
         Stage stage;
         Parent root;
 
-        if (event.getSource() == backBtn2) {
-            stage = (Stage) backBtn2.getScene().getWindow();
+            stage = (Stage) listTableView.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 950, 550);
+            Scene scene = new Scene(root,1170, 600);
             stage.setScene(scene);
             stage.show();
-        }
+
 
     }
 
@@ -539,6 +542,7 @@ public class POSController {
     public void removeAction(ActionEvent event) {
 
         Integer index = listTableView.getSelectionModel().getSelectedIndex();
+        Item selectedItem = (Item) listTableView.getSelectionModel().getSelectedItem();
 
         double dropValue = 0.0;
 
@@ -552,7 +556,8 @@ public class POSController {
         } else {
             dropValue = listTableView.getSelectionModel().getSelectedItem().getTotal();
             finalSubTotalPrice = finalSubTotalPrice - dropValue;
-            listTableView.getSelectionModel().clearSelection();
+           // listTableView.getSelectionModel().clearSelection();
+            listTableView.getItems().remove(selectedItem);
 //            resetInvoice();
             calculation();
         }
@@ -563,15 +568,14 @@ public class POSController {
         Stage stage;
         Parent root;
 
-        if (event.getSource() == logoutItem) {
+
             //get reference to the button's stage
-            stage = (Stage) backBtn2.getScene().getWindow();
+            stage = (Stage) productTableView.getScene().getWindow();
             //load up OTHER FXML document
             root = FXMLLoader.load(getClass().getResource("../views/login.fxml"));
             Scene scene = new Scene(root, 625, 400);
             stage.setScene(scene);
             stage.show();
-        }
 
     }
 

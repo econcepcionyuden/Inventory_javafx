@@ -46,6 +46,8 @@ public class AddProductController {
     private ComboBox<String> typeBox;
     @FXML
     private TextField quantity;
+    @FXML
+    private Label errorLabel;
 
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -63,24 +65,27 @@ public class AddProductController {
     @FXML
     private void insertProduct(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         String status = "Good";
-        try {
-            ProductDAO.insertProduct(insertProductId.getText(), title.getText(), typeBox.getValue().toString(), description.getText(), unitPrice.getText(), quantity.getText(), status, reOrderPoint.getText(), surplusPoint.getText(), date, expireDate.getValue().toString());
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Product add");
-            alert.setHeaderText("Success message");
-            alert.setContentText("The product was successfully added!!");
-            alert.showAndWait();
-            clear();
-        } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Product add");
-            alert.setHeaderText("Failure message");
-            alert.setContentText("Problem occurred while adding product " + e);
-            alert.showAndWait();
-            throw e;
+
+        if (validateInput()) {
+            try {
+                ProductDAO.insertProduct(insertProductId.getText(), title.getText(), typeBox.getValue().toString(), description.getText(), unitPrice.getText(), quantity.getText(), status, reOrderPoint.getText(), surplusPoint.getText(), date, expireDate.getValue().toString());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Product add");
+                alert.setHeaderText("Success message");
+                alert.setContentText("The product was successfully added!!");
+                alert.showAndWait();
+                clear();
+
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Product add");
+                alert.setHeaderText("Failure message");
+                alert.setContentText("Problem occurred while adding product " + e);
+                alert.showAndWait();
+                throw e;
+            }
         }
     }
-
 
     @FXML
     private void closeButtonAction() {
@@ -115,5 +120,19 @@ public class AddProductController {
         surplusPoint.clear();
         expireDate.getEditor().clear();
         expireDate.setValue(null);
+        errorLabel.setText("");
+    }
+
+
+
+    private boolean validateInput() {
+        String errorMessage = "";
+        if (title.getText().matches("^[A-Za-z0-9\\s\\-_,-]+$")&&unitPrice.getText().matches("^[0-9]{1,10}$")&&quantity.getText().matches("^[0-9]{1,10}$")&&description.getText().matches("^[A-Za-z0-9\\s\\-_,-]+$")&&typeBox.getValue().toString().matches("^[a-zA-Z\\s]+") && reOrderPoint.getText().matches("^[0-9]{1,10}$")&& expireDate.getValue().toString().matches("^(19[5-9][0-9]|20[0-4][0-9]|2050)[-/](0?[1-9]|1[0-2])[-/](0?[1-9]|[12][0-9]|3[01])$")&& surplusPoint.getText().matches("^[0-9]{1,10}$")) {
+            return true;
+        } else {
+            errorMessage += "Invalid input entered!!\n";
+            errorLabel.setText(errorMessage);
+        }
+        return false;
     }
 }

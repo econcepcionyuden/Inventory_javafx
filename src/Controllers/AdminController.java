@@ -11,7 +11,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import models.MonthlyRecord;
 import models.Purchase;
 import models.Sale;
@@ -86,7 +89,8 @@ public class AdminController {
     @FXML
     private Button clientsBtn;
 
-
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     @FXML
     private void handleNavigation(ActionEvent event) throws IOException {
@@ -109,10 +113,13 @@ public class AdminController {
         } else if (event.getSource() == productsBtn) {
             stage = (Stage) productsBtn.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/Products.fxml"));
+            Scene scene = new Scene(root, 1045, 565);
+            stage.setScene(scene);
+            stage.show();
         }else if (event.getSource() == posItem) {
             stage = (Stage) salesBtn.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/POS.fxml"));
-            Scene scene = new Scene(root, 1000, 600);
+            Scene scene = new Scene(root,1070, 595);
             stage.setScene(scene);
             stage.show();
         } else if (event.getSource() == logoutItem) {
@@ -130,7 +137,7 @@ public class AdminController {
 
         }
 
-        Scene scene = new Scene(root, 750, 500);
+        Scene scene = new Scene(root, 775, 500);
         stage.setScene(scene);
         stage.show();
     }
@@ -151,6 +158,29 @@ public class AdminController {
     }
 
     @FXML
+    public void moreStat() throws Exception {
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/adminStat.fxml")));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        root.setOnMousePressed((MouseEvent e) -> {
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) -> {
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Statistics");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.showAndWait();
+
+    }
+
+
+    @FXML
     private void minimizeAction() {
         Stage stage = (Stage) salesBtn.getScene().getWindow();
         stage.setIconified(true);
@@ -169,26 +199,11 @@ public class AdminController {
 
         //Get all overall information
         int goodProductNo = ProductDAO.productCount();
-        String productNoString = Integer.toString(goodProductNo);
-        goodProductCount.setText(productNoString);
-
         int expiredProductNo = ProductDAO.expiredProductCount();
-        String expiredProductNoString = Integer.toString(expiredProductNo);
-        expiredProductCount.setText(expiredProductNoString);
-
-
         int damagedProductNo = ProductDAO.damagedProductCount();
-        String damagedProductNoString = Integer.toString(damagedProductNo);
-        damagedProductCount.setText(damagedProductNoString);
-
-
         int saleNo = SaleDAO.saleCount(date);
-        String saleNoString = Integer.toString(saleNo);
-        saleCount.setText(saleNoString);
-
         int purchaseNo = PurchaseDAO.purchaseCount(date);
-        String purchaseNoString = Integer.toString(purchaseNo);
-        purchaseCount.setText(purchaseNoString);
+
 
         ObservableList<Purchase> purchaseData = PurchaseDAO.totalPurchaseAmounts(date);
 
@@ -202,8 +217,7 @@ public class AdminController {
             totalExpense += quantities[i] * amounts[i];
 
         }
-        String totalExpenseString = Integer.toString(totalExpense);
-        totalExpenseField.setText(totalExpenseString);
+
 
 
         ObservableList<Sale> saleData = SaleDAO.totalSaleAmounts(date);
@@ -217,12 +231,8 @@ public class AdminController {
             totalIncome += saleQuantities[i] * saleAmounts[i];
         }
 
-        String totalIncomeString = Integer.toString(totalIncome);
-        totalIncomeField.setText(totalIncomeString);
-
         int grossProfit = totalIncome - totalExpense;
-        String stringGrossProfit = Integer.toString(grossProfit);
-        grossProfitField.setText(stringGrossProfit);
+
 
 
         ObservableList<Purchase> previousPurchaseData = PurchaseDAO.previousTotalPurchaseAmounts(previousDate, date);
@@ -250,17 +260,10 @@ public class AdminController {
         }
 
         int previousGrossProfit = previousTotalIncome - previousTotalExpense;
-        String stringPreviousGrossProfit = Integer.toString(previousGrossProfit);
-        previousProfit.setText(stringPreviousGrossProfit);
-
         float profitPercentage = ((float) grossProfit - (float) previousGrossProfit) / (float) previousGrossProfit;
         profitPercentage = profitPercentage * 100;
-        String stringProfitPercentage = String.valueOf(Math.round(profitPercentage));
-        profitProgress.setText(stringProfitPercentage + "%");
-
         float assetTurnoverRatio = ((float) saleNo) / ((float) goodProductNo + expiredProductNo + damagedProductNo);
-        String stringAssetTurnoverRatio = String.valueOf(assetTurnoverRatio);
-        assetTurnover.setText(stringAssetTurnoverRatio);
+
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                 new PieChart.Data("GOOD", goodProductNo),
@@ -284,6 +287,7 @@ public class AdminController {
         int[] expiredProductCounts = new int[monthlyRecordsData.size()];
         int[] goodProductCounts = new int[monthlyRecordsData.size()];
         int[] totalProductCounts = new int[monthlyRecordsData.size()];
+        int[] monthNo = new int[monthlyRecordsData.size()];
 
 
         String[] monthName = { "January", "February", "March", "April", "May", "June", "July",
@@ -295,30 +299,28 @@ public class AdminController {
             damagedProductCounts[i] = Integer.parseInt(monthlyRecordsData.get(i).getDamagedProductCount());
             expiredProductCounts[i] = Integer.parseInt(monthlyRecordsData.get(i).getExpiredProductCount());
             goodProductCounts[i] = Integer.parseInt(monthlyRecordsData.get(i).getGoodProductCount());
+            monthNo[i] = Integer.parseInt(monthlyRecordsData.get(i).getMonth());
 
             totalProductCounts[i] = damagedProductCounts[i]+expiredProductCounts[i]+goodProductCounts[i];
 
-
-
-
-            series1.getData().add(new XYChart.Data(monthName[(i)], turnoverValues[i]));
-            series2.getData().add(new XYChart.Data(monthName[(i)], profitValues[i]));
-            series3.getData().add(new XYChart.Data(monthName[(i)], damagedProductCounts[i]));
-            series4.getData().add(new XYChart.Data(monthName[(i)], totalProductCounts[i]));
+            series1.getData().add(new XYChart.Data(monthName[monthNo[i]-1], turnoverValues[i]));
+            series2.getData().add(new XYChart.Data(monthName[monthNo[i]-1], profitValues[i]));
+            series3.getData().add(new XYChart.Data(monthName[monthNo[i]-1], damagedProductCounts[i]));
+            series4.getData().add(new XYChart.Data(monthName[monthNo[i]-1], totalProductCounts[i]));
 
         }
 
         inventoryLineChart.getData().addAll(series1);
+        inventoryLineChart.setLegendVisible(false);
         y.setLabel("Turnover\nvalues");
-        x.setLabel("Months");
         profit.setLabel("Profit");
-        time.setLabel("Months");
         inventory.setLabel("Number\nof\ninventory");
-        time.setLabel("Months");
         profitLineChart.getData().addAll(series2);
+        profitLineChart.setLegendVisible(false);
 
         profitAndTurnover.getData().add(series3);
         profitAndTurnover.getData().add(series4);
+        profitAndTurnover.setLegendVisible(false);
 
 
 

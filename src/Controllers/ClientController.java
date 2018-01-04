@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.Client;
+import models.User;
 import util.ClientDAO;
 
 import java.io.IOException;
@@ -45,7 +46,6 @@ public class ClientController {
     private TableColumn<Client, String> clientIdColumn;
     @FXML
     private TableColumn<Client, String> nameColumn;
-
     @FXML
     private TableColumn<Client, String> companyColumn;
     @FXML
@@ -59,9 +59,15 @@ public class ClientController {
     @FXML
     private Button backBtn2;
 
-    ObservableList<String> criteriaList = FXCollections.observableArrayList("","By company", "By Name");
+    ObservableList<String> criteriaList = FXCollections.observableArrayList("", "By company", "By Name");
     private double xOffset = 0;
     private double yOffset = 0;
+
+    public static String editableClientId = null;
+    public static String editableName = null;
+    public static String editableCompany = null;
+    public static String editableAddress = null;
+    public static String editableContactNo = null;
 
     @FXML
     public void fieldsClear(ActionEvent actionEvent) {
@@ -85,7 +91,7 @@ public class ClientController {
 
     //  Search a client by company and name
     @FXML
-    private void searchClients(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
+    private void searchClients() throws ClassNotFoundException, SQLException {
 
 
         if (searchChoice.getValue().toString().equals("By company")) {
@@ -124,7 +130,40 @@ public class ClientController {
 
 
     @FXML
-    private void deleteRow(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
+    private void editAction() throws SQLException, ClassNotFoundException, IOException {
+
+        Client client = (Client) clientTable.getSelectionModel().getSelectedItem();
+
+        editableClientId = client.getClientId();
+        editableName = client.getName();
+        editableCompany = client.getCompany();
+        editableAddress = client.getAddress();
+        editableContactNo = client.getContact();
+
+
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/editClient.fxml")));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        root.setOnMousePressed((MouseEvent e) -> {
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) -> {
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Edit Client");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.showAndWait();
+
+    }
+
+
+    @FXML
+    private void deleteRow() throws ClassNotFoundException, SQLException {
 
         Client selectedItem = (Client) clientTable.getSelectionModel().getSelectedItem();
         String id = ((Client) clientTable.getSelectionModel().getSelectedItem()).getClientId();
@@ -164,7 +203,7 @@ public class ClientController {
 
     //Search all clients
     @FXML
-    private void searchAllClients(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+    private void searchAllClients() throws SQLException, ClassNotFoundException {
         try {
 
             ObservableList<Client> clientData = ClientDAO.searchAllClients();
@@ -236,17 +275,15 @@ public class ClientController {
     }
 
     @FXML
-    private void backAction2(ActionEvent event) throws IOException {
+    private void backAction2() throws IOException {
         Stage stage;
         Parent root;
 
-        if (event.getSource() == backBtn2) {
-            stage = (Stage) backBtn2.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 950, 550);
-            stage.setScene(scene);
-            stage.show();
-        }
+        stage = (Stage) clientTable.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
+        Scene scene = new Scene(root, 1170, 600);
+        stage.setScene(scene);
+        stage.show();
 
     }
 
@@ -263,7 +300,7 @@ public class ClientController {
     }
 
     @FXML
-    public void addClient(ActionEvent event) throws IOException {
+    public void addClient() throws IOException {
 
         FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/addClient.fxml")));
         Parent root = loader.load();

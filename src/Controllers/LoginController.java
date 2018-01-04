@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import models.User;
 import util.UserDAO;
 
+import java.security.MessageDigest;
+
 
 public class LoginController {
     @FXML
@@ -51,7 +53,7 @@ public class LoginController {
         if (validateInput()) {
             String username = userName.getText().trim();
             User user = UserDAO.searchUserByName(username);
-            passSession(user.getRole());
+            //passSession(user.getRole());
 
 
             if (user == null) {
@@ -64,10 +66,21 @@ public class LoginController {
                 alert.showAndWait();
 
             } else {
-                String userPassword = user.getPassword();
-                String role = user.getRole();
 
-                if (userPassword.equals(password.getText())) {
+                String userPassword = user.getPassword();
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update(password.getText().getBytes());
+                byte byteData[] = md.digest();
+                StringBuffer sb = new StringBuffer();
+                for (int i = 0; i < byteData.length; i++) {
+                    sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+
+                }
+
+                String role = user.getRole();
+                sessionRole = role;
+
+                if (sb.toString().equals(userPassword)) {
 
                     if (role.equals("Admin")) {
                         windows("../views/admin.fxml", "Admin Dashboard");
@@ -80,7 +93,7 @@ public class LoginController {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Login Error");
                     alert.setHeaderText("Failure message");
-                    alert.setContentText("Invalid credentials!!");
+                    alert.setContentText("Invalid password!!");
                     alert.showAndWait();
 
                 }
@@ -208,17 +221,4 @@ public class LoginController {
     }
 
 
-
-
-    private static int sessionID = 0;
-
-    private String generateAdminSessionID() {
-        sessionID++;
-        return "Welcome Admin" + sessionID;
-    }
-
-    private String generateOperatorSessionID() {
-        sessionID++;
-        return "Welcome Operator" + sessionID;
-    }
 }

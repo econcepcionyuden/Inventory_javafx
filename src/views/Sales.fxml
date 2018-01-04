@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0" prefWidth="752.0" style="-fx-background-color: #85C1E9;" stylesheets="@../Scenes/style.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.SaleController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0" prefWidth="779.0" style="-fx-background-color: #85C1E9;" stylesheets="@../Scenes/style.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.SaleController">
     <children>
         <VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
-        <Separator layoutX="91.0" layoutY="-7.0" orientation="VERTICAL" prefHeight="542.0" prefWidth="6.0" />
-        <TableView fx:id="saleTable" editable="true" layoutX="102.0" layoutY="117.0" prefHeight="301.0" prefWidth="631.0" tableMenuButtonVisible="true">
+        <TableView fx:id="saleTable" editable="true" layoutX="23.0" layoutY="121.0" prefHeight="318.0" prefWidth="704.0" tableMenuButtonVisible="true">
             <columns>
                 <TableColumn fx:id="saleIdColumn" prefWidth="57.0" text="Id" />
                 <TableColumn fx:id="transactionDateColumn" prefWidth="95.0" text="Date" />
@@ -26,21 +25,77 @@
                 <TableColumn fx:id="clientColumn" prefWidth="150.0" text="Client" />
             </columns>
         </TableView>
-      <JFXButton fx:id="backBtn2" layoutX="10.0" layoutY="436.0" onAction="#backAction2" prefHeight="30.0" prefWidth="66.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Back " textFill="#fcfafa" />
-      <JFXButton fx:id="refresh" layoutX="633.0" layoutY="444.0" onAction="#searchSales" prefHeight="28.0" prefWidth="98.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Refresh" textFill="#fcf9f9" />
-      <JFXButton fx:id="searchBtn" layoutX="642.0" layoutY="71.0" onAction="#searchSale" prefHeight="9.0" prefWidth="88.0" style="-fx-background-color: #3498DB; -fx-border-color: #fffdfd;" text="Search" textFill="WHITE" />
-      <Label layoutX="242.0" layoutY="76.0" text="Search By :" />
-      <ChoiceBox fx:id="searchChoice" layoutX="340.0" layoutY="72.0" prefHeight="26.0" prefWidth="139.0" />
-      <TextField fx:id="searchField" layoutX="495.0" layoutY="72.0" prefHeight="26.0" prefWidth="139.0" />
-      <ImageView fitHeight="18.0" fitWidth="28.0" layoutX="716.0" layoutY="18.0" onMouseClicked="#closeButtonAction" pickOnBounds="true" preserveRatio="true">
+      <ChoiceBox fx:id="searchChoice" layoutX="337.0" layoutY="88.0" prefHeight="26.0" prefWidth="139.0" />
+      <TextField fx:id="searchField" layoutX="492.0" layoutY="88.0" prefHeight="26.0" prefWidth="180.0" />
+      <ImageView fitHeight="26.0" fitWidth="26.0" layoutX="730.0" layoutY="14.0" onMouseClicked="#closeButtonAction" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Scenes/close.png" />
+            <Image url="@../Scenes/close-window-xxl.png" />
          </image>
+         <effect>
+            <DropShadow />
+         </effect>
       </ImageView>
-      <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="690.0" layoutY="19.0" onMouseClicked="#minimizeAction" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="26.0" fitWidth="29.0" layoutX="698.0" layoutY="14.0" onMouseClicked="#minimizeAction" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Scenes/minimize.png" />
+            <Image url="@../Scenes/minimize-window-xxl.png" />
          </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="36.0" fitWidth="45.0" layoutX="-263.0" layoutY="449.0" onMouseClicked="#backAction2" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/backxxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="36.0" fitWidth="26.0" layoutX="691.0" layoutY="84.0" onMouseClicked="#searchSale" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/search-13-xxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="41.0" layoutY="73.0" onMouseClicked="#searchSales" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/sinchronize-xxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <Label layoutX="29.0" layoutY="105.0" prefHeight="16.0" prefWidth="52.0" text="Refresh" textFill="#f8f8f8" />
+      <ImageView fitHeight="36.0" fitWidth="45.0" layoutX="28.0" layoutY="454.0" onMouseClicked="#backAction2" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/backxxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <Label layoutX="23.0" layoutY="28.0" prefHeight="16.0" prefWidth="163.0" text="SALES" textFill="#fcf9f9">
+         <font>
+            <Font name="System Bold" size="23.0" />
+         </font>
+         <effect>
+            <DropShadow />
+         </effect>
+      </Label>
+      <Label layoutX="702.0" layoutY="255.0" prefHeight="19.0" prefWidth="101.0" rotate="270.0" style="-fx-font-size: 15;" text="StockKeeper" textFill="#f8f7f7">
+         <effect>
+            <DropShadow />
+         </effect>
+      </Label>
+      <ImageView fitHeight="28.0" fitWidth="38.0" layoutX="738.0" layoutY="182.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+         <image>
+            <Image url="@../Scenes/web_hi_res_512.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
       </ImageView>
     </children>
 </AnchorPane>

@@ -77,6 +77,16 @@ public class UserController {
     ObservableList<String> criteriaList = FXCollections.observableArrayList("", "Name", "Role");
     ObservableList<String> newRoleList = FXCollections.observableArrayList("", "Admin", "Operator");
 
+    public static String editablePassword = null;
+    public static String editableFirstName = null;
+    public static String editableLastName = null;
+    public static String editableRole = null;
+    public static String editableContactNo = null;
+    public static String editableAddress = null;
+    public static String editableUserId = null;
+
+
+
     @FXML
     public void fieldsClear(ActionEvent actionEvent) {
 
@@ -110,7 +120,7 @@ public class UserController {
 
     //  Search a user by name and role
     @FXML
-    private void searchUsers(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
+    private void searchUsers() throws ClassNotFoundException, SQLException {
 
         if (searchChoice.getValue().toString().equals("Role")) {
             try {
@@ -146,27 +156,45 @@ public class UserController {
     }
 
 
+
+
     @FXML
-    private void updateUser(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        try {
-            UserDAO.updateUser(newUserId.getText(), newName.getText(), newRole.getValue().toString());
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("User update");
-            alert.setHeaderText("Success message");
-            alert.setContentText("The user " + userId.getText() + " was successfully updated!!");
-            alert.showAndWait();
-        } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("User update");
-            alert.setHeaderText("Failure message");
-            alert.setContentText("Problem occurred while updating user " + e);
-            alert.showAndWait();
-        }
+    private void editAction() throws SQLException, ClassNotFoundException, IOException {
+
+        User user = (User) userTable.getSelectionModel().getSelectedItem();
+
+        editableUserId = user.getUserId();
+        editableFirstName = user.getFirstName();
+        editableLastName = user.getLastName();
+        editableContactNo = user.getContactNo();
+        editableRole = user.getRole();
+        editableAddress = user.getAddress();
+        editablePassword = user.getPassword();
+
+
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/editUser.fxml")));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        root.setOnMousePressed((MouseEvent e) -> {
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) -> {
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Edit User");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.showAndWait();
+
     }
 
 
     @FXML
-    private void deleteRow(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
+    private void deleteRow() throws ClassNotFoundException, SQLException {
 
         User selectedItem = (User) userTable.getSelectionModel().getSelectedItem();
         String id = ((User) userTable.getSelectionModel().getSelectedItem()).getUserId();
@@ -205,7 +233,7 @@ public class UserController {
 
     //Search all users
     @FXML
-    private void searchAllUsers(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+    private void searchAllUsers() throws SQLException, ClassNotFoundException {
         try {
 
             ObservableList<User> userData = UserDAO.searchAllUsers();
@@ -226,7 +254,6 @@ public class UserController {
     private void initialize() throws SQLException {
 
         searchChoice.setItems(criteriaList);
-        newRole.setItems(newRoleList);
         userIdColumn.setCellValueFactory(cellData -> cellData.getValue().userIdProperty());
         firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
         lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
@@ -307,19 +334,17 @@ public class UserController {
 
 
     @FXML
-    private void backAction2(ActionEvent event) throws IOException {
+    private void backAction2() throws IOException {
         Stage stage;
         Parent root;
 
-        if (event.getSource() == backBtn2) {
             //get reference to the button's stage
-            stage = (Stage) backBtn2.getScene().getWindow();
+            stage = (Stage) userTable.getScene().getWindow();
             //load up OTHER FXML document
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 950, 550);
+            Scene scene = new Scene(root,1170, 600);
             stage.setScene(scene);
             stage.show();
-        }
 
     }
 
@@ -337,7 +362,7 @@ public class UserController {
 
 
     @FXML
-    public void addUser(ActionEvent event) throws Exception {
+    public void addUser() throws Exception {
 
         FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/createUser.fxml")));
         Parent root = loader.load();

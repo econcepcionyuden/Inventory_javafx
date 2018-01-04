@@ -165,6 +165,16 @@ public class VendorDAO {
         }
     }
 
+    public static void updateVendor(String vendorId, String name, String company,String contact,String address) throws SQLException, ClassNotFoundException {
 
+        String updateStmt = "UPDATE vendor SET name = '" + name + "',company = '" + company + "',contact_no = '" + contact + "',address = '" + address + "' WHERE id = '" + vendorId + "'";
+        try {
+            DBUtil.dbExecuteUpdate(updateStmt);
+        } catch (SQLException e) {
+            System.out.print("Error occurred while UPDATE Operation: " + e);
+            throw e;
+        }
+
+    }
 
 }

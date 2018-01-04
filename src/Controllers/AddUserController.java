@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import util.UserDAO;
 
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -48,8 +49,20 @@ public class AddUserController {
     @FXML
     private void addUser(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, NoSuchAlgorithmException {
 
+
+
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(password.getText().getBytes());
+        byte byteData[] = md.digest();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++) {
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+
+
+
         try {
-            UserDAO.addUser(firstName.getText(), lastName.getText(), role.getValue().toString(), password.getText(),contactNo.getText(),address.getText());
+            UserDAO.addUser(firstName.getText(), lastName.getText(), role.getValue().toString(),password.getText(),contactNo.getText(),address.getText());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Add user");
             alert.setHeaderText("Success message");

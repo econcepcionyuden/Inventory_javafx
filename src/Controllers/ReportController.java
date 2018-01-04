@@ -166,7 +166,7 @@ public class ReportController {
         if (event.getSource() == backBtn2) {
             stage = (Stage) backBtn2.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 950, 550);
+            Scene scene = new Scene(root,1170, 600);
             stage.setScene(scene);
             stage.show();
         }

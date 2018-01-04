@@ -30,41 +30,6 @@ public class UserDAO {
     }
 
 
-    public static void updateUser(String userId, String newName, String newRole) throws SQLException, ClassNotFoundException {
-
-
-        if (newName.isEmpty()) {
-            String updateStmt = "UPDATE user SET role = '" + newRole + "'  WHERE id = '" + userId + "'";
-            try {
-                DBUtil.dbExecuteUpdate(updateStmt);
-            } catch (SQLException e) {
-                System.out.print("Error occurred while UPDATE Operation: " + e);
-                throw e;
-            }
-
-        } else if (newRole.isEmpty()) {
-            String updateStmt = "UPDATE user SET first_name='" + newName + "' WHERE id = '" + userId + "'";
-            try {
-                DBUtil.dbExecuteUpdate(updateStmt);
-            } catch (SQLException e) {
-                System.out.print("Error occurred while UPDATE Operation: " + e);
-                throw e;
-            }
-        } else {
-
-            String updateStmt = "UPDATE user SET first_name='" + newName + "',first_name='" + newName + "' WHERE id = '" + userId + "'";
-            try {
-                DBUtil.dbExecuteUpdate(updateStmt);
-            } catch (SQLException e) {
-                System.out.print("Error occurred while UPDATE Operation: " + e);
-                throw e;
-            }
-
-        }
-    }
-
-
-
     public static User searchUserByName(String searchByName) throws SQLException, ClassNotFoundException {
 
         String selectStmt = "SELECT * FROM user WHERE first_name='"+searchByName+"'";
@@ -78,6 +43,18 @@ public class UserDAO {
             System.out.println("While searching an user with '" + searchByName + "' id, an error occurred: " + e);
             throw e;
         }
+    }
+
+    public static void updateUser(int userId, String firstName, String lastName, String role,String password,String contact,String address) throws SQLException, ClassNotFoundException {
+
+        String updateStmt = "UPDATE user SET first_name = '" + firstName + "',last_name = '" + lastName + "',role = '" + role + "',password = md5('" + password + "'),contact = '" + contact + "',address = '" + address + "' WHERE id = '" + userId + "'";
+        try {
+            DBUtil.dbExecuteUpdate(updateStmt);
+        } catch (SQLException e) {
+            System.out.print("Error occurred while UPDATE Operation: " + e);
+            throw e;
+        }
+
     }
 
 
@@ -147,7 +124,7 @@ public class UserDAO {
 
     public static void addUser(String firstName,String lastName, String role, String password, String contact, String address) throws SQLException, ClassNotFoundException {
 
-        String updateStmt = "INSERT INTO user(first_name,last_name,role,password,contact,address) VALUES('"+firstName+"','"+lastName+"','"+role+"','"+password+"','"+contact+"','"+address+"')";
+        String updateStmt = "INSERT INTO user(first_name,last_name,role,password,contact,address) VALUES('"+firstName+"','"+lastName+"','"+role+"',md5('"+password+"'),'"+contact+"','"+address+"')";
         try {
             DBUtil.dbExecuteUpdate(updateStmt);
         } catch (SQLException e) {

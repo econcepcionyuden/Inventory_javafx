@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import models.Client;
 import models.Vendor;
 import util.VendorDAO;
 
@@ -63,6 +64,12 @@ public class VendorController {
     private double xOffset = 0;
     private double yOffset = 0;
 
+    public static String editableVendorId = null;
+    public static String editableName = null;
+    public static String editableCompany = null;
+    public static String editableAddress = null;
+    public static String editableContactNo = null;
+
     @FXML
     public void fieldsClear(ActionEvent actionEvent) {
         vendorId.clear();
@@ -84,7 +91,7 @@ public class VendorController {
 
     //  Search a vendor by company
     @FXML
-    private void searchVendor(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
+    private void searchVendor() throws ClassNotFoundException, SQLException {
 
         if (searchChoice.getValue().toString().equals("Company")) {
 
@@ -123,7 +130,7 @@ public class VendorController {
 
 
     @FXML
-    private void deleteRow(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
+    private void deleteRow() throws ClassNotFoundException, SQLException {
 
         Vendor selectedItem = (Vendor) vendorTable.getSelectionModel().getSelectedItem();
         String id = ((Vendor) vendorTable.getSelectionModel().getSelectedItem()).getVendorId();
@@ -161,7 +168,7 @@ public class VendorController {
 
     //Search all vendors
     @FXML
-    private void searchAllVendors(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+    private void searchAllVendors() throws SQLException, ClassNotFoundException {
         try {
 
             ObservableList<Vendor> vendorData = VendorDAO.searchAllVendors();
@@ -236,17 +243,15 @@ public class VendorController {
 
 
     @FXML
-    private void backAction2(ActionEvent event) throws IOException {
+    private void backAction2() throws IOException {
         Stage stage;
         Parent root;
 
-        if (event.getSource() == backBtn2) {
-            stage = (Stage) backBtn2.getScene().getWindow();
+            stage = (Stage) vendorTable.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 950, 550);
+            Scene scene = new Scene(root, 1170, 600);
             stage.setScene(scene);
             stage.show();
-        }
 
     }
     @FXML
@@ -262,7 +267,7 @@ public class VendorController {
     }
 
     @FXML
-    public void addVendor(ActionEvent event) throws IOException {
+    public void addVendor() throws IOException {
 
         FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/addVendor.fxml")));
         Parent root = loader.load();
@@ -281,6 +286,39 @@ public class VendorController {
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
         stage.showAndWait();
+    }
+
+
+    @FXML
+    private void editAction() throws SQLException, ClassNotFoundException, IOException {
+
+        Vendor vendor = (Vendor) vendorTable.getSelectionModel().getSelectedItem();
+
+        editableVendorId = vendor.getVendorId();
+        editableName = vendor.getName();
+        editableCompany = vendor.getCompany();
+        editableAddress = vendor.getAddress();
+        editableContactNo = vendor.getContact();
+
+
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/editVendor.fxml")));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        root.setOnMousePressed((MouseEvent e) -> {
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) -> {
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Edit Supplier");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.showAndWait();
+
     }
 
 }

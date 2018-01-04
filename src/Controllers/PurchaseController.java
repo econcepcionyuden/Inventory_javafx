@@ -103,7 +103,7 @@ public class PurchaseController {
 
     //  Search a purchase by date and ID
     @FXML
-    private void searchPurchase(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
+    private void searchPurchase() throws ClassNotFoundException, SQLException {
 
         if (searchChoice.getValue().toString().equals("Date")) {
 
@@ -145,7 +145,7 @@ public class PurchaseController {
 
     //Search all purchases
     @FXML
-    private void searchPurchases(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+    private void searchPurchases() throws SQLException, ClassNotFoundException {
         try {
 
             ObservableList<Purchase> purchaseData = PurchaseDAO.searchPurchases();
@@ -275,7 +275,7 @@ public class PurchaseController {
     }
 
     @FXML
-    public void addAction(ActionEvent event) throws IOException {
+    public void addAction() throws IOException {
 
         FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/createPurchase.fxml")));
         Parent root = loader.load();
@@ -324,17 +324,15 @@ public class PurchaseController {
     }
 
     @FXML
-    private void backAction(ActionEvent event) throws IOException {
+    private void backAction() throws IOException {
         Stage stage;
         Parent root;
 
-        if (event.getSource() == backBtn) {
-            stage = (Stage) backBtn.getScene().getWindow();
+            stage = (Stage) purchaseTable.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 950, 550);
+            Scene scene = new Scene(root,1170, 600);
             stage.setScene(scene);
             stage.show();
-        }
 
     }
 

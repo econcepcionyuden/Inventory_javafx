@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="804.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.VendorController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="788.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.VendorController">
     <children>
         <VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
         <VBox layoutX="9.0" layoutY="87.0" prefHeight="198.0" prefWidth="80.0" spacing="12.0" />
-        <TableView fx:id="vendorTable" editable="true" layoutX="11.0" layoutY="121.0" prefHeight="304.0" prefWidth="706.0" stylesheets="@../Scenes/style.css" tableMenuButtonVisible="true">
+        <TableView fx:id="vendorTable" editable="true" layoutX="11.0" layoutY="121.0" prefHeight="297.0" prefWidth="724.0" stylesheets="@../Scenes/style.css" tableMenuButtonVisible="true">
             <columns>
                 <TableColumn fx:id="vendorIdColumn" prefWidth="64.0" text="Id" />
                 <TableColumn fx:id="nameColumn" prefWidth="131.0" text="Name" />
@@ -24,24 +25,96 @@
                 <TableColumn fx:id="contactColumn" prefWidth="124.0" text="Contact No" />
             </columns>
         </TableView>
-        <JFXButton fx:id="addVendor" layoutX="338.0" layoutY="436.0" onAction="#addVendor" prefHeight="26.0" prefWidth="97.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Add Vendor" textFill="WHITE" />
-        <JFXButton fx:id="backBtn2" layoutX="8.0" layoutY="435.0" onAction="#backAction2" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Back " textFill="#fcfafa" />
-        <JFXButton layoutX="598.0" layoutY="436.0" onAction="#deleteRow" prefHeight="28.0" prefWidth="121.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Delete Vendor" textFill="#fcf9f9" />
-        <JFXButton fx:id="refresh" layoutX="219.0" layoutY="435.0" onAction="#searchAllVendors" prefHeight="28.0" prefWidth="97.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Refresh" textFill="#fffefe" />
-        <JFXButton layoutX="457.0" layoutY="436.0" onAction="#deleteRow" prefHeight="28.0" prefWidth="121.0" style="-fx-background-color: #3498DB; -fx-border-color: #ffffff;" text="Update Vendor" textFill="#fcf9f9" />
-      <JFXButton fx:id="searchBtn" layoutX="601.0" layoutY="85.0" onAction="#searchVendor" prefHeight="28.0" prefWidth="113.0" style="-fx-background-color: #3498DB; -fx-border-color: #fffdfd;" text="Search" textFill="WHITE" />
-      <Label layoutX="215.0" layoutY="91.0" text="Search By :" />
-      <ChoiceBox fx:id="searchChoice" layoutX="303.0" layoutY="86.0" prefWidth="150.0" />
-      <TextField fx:id="searchField" layoutX="463.0" layoutY="86.0" prefHeight="26.0" prefWidth="130.0" />
-      <ImageView fitHeight="18.0" fitWidth="32.0" layoutX="710.0" layoutY="15.0" onMouseClicked="#closeButtonAction" pickOnBounds="true" preserveRatio="true">
+      <ChoiceBox fx:id="searchChoice" layoutX="349.0" layoutY="84.0" prefWidth="150.0" />
+      <TextField fx:id="searchField" layoutX="509.0" layoutY="84.0" prefHeight="26.0" prefWidth="191.0" />
+      <ImageView fitHeight="36.0" fitWidth="26.0" layoutX="740.0" layoutY="13.0" onMouseClicked="#closeButtonAction" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Scenes/close.png" />
+            <Image url="@../Scenes/close-window-xxl.png" />
          </image>
+         <effect>
+            <DropShadow />
+         </effect>
       </ImageView>
-      <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="688.0" layoutY="16.0" onMouseClicked="#minimizeAction" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="26.0" fitWidth="26.0" layoutX="708.0" layoutY="13.0" onMouseClicked="#minimizeAction" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Scenes/minimize.png" />
+            <Image url="@../Scenes/minimize-window-xxl.png" />
          </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="596.0" layoutY="429.0" onMouseClicked="#addVendor" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/add-list-xxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <Label layoutX="596.0" layoutY="458.0" prefHeight="16.0" prefWidth="29.0" text="Add" textFill="#f8f8f8" />
+      <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="655.0" layoutY="429.0" onMouseClicked="#editAction" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/edit-property-xxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <Label layoutX="653.0" layoutY="459.0" prefHeight="16.0" prefWidth="29.0" text="Edit" textFill="#f8f8f8" />
+      <ImageView fitHeight="26.0" fitWidth="37.0" layoutX="710.0" layoutY="426.0" onMouseClicked="#deleteRow" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/delete-xxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <Label layoutX="701.0" layoutY="458.0" prefHeight="16.0" prefWidth="43.0" text="Delete" textFill="#f8f8f8" />
+      <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="45.0" layoutY="62.0" onMouseClicked="#searchAllVendors" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/sinchronize-xxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <Label layoutX="31.0" layoutY="93.0" prefHeight="16.0" prefWidth="52.0" text="Refresh" textFill="#f8f8f8" />
+      <ImageView fitHeight="36.0" fitWidth="45.0" layoutX="13.0" layoutY="427.0" onMouseClicked="#backAction2" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/backxxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="26.0" fitWidth="26.0" layoutX="716.0" layoutY="85.0" onMouseClicked="#searchVendor" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/search-13-xxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <Label layoutX="13.0" layoutY="18.0" prefHeight="16.0" prefWidth="163.0" text="SUPPLIERS" textFill="#fcf9f9">
+         <font>
+            <Font name="System Bold" size="23.0" />
+         </font>
+         <effect>
+            <DropShadow />
+         </effect>
+      </Label>
+      <Label layoutX="703.0" layoutY="254.0" prefHeight="19.0" prefWidth="101.0" rotate="270.0" style="-fx-font-size: 15;" text="StockKeeper" textFill="#f8f7f7">
+         <effect>
+            <DropShadow />
+         </effect>
+      </Label>
+      <ImageView fitHeight="28.0" fitWidth="38.0" layoutX="739.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+         <image>
+            <Image url="@../Scenes/web_hi_res_512.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
       </ImageView>
     </children>
 </AnchorPane>

@@ -82,12 +82,34 @@ public class ProductController {
     private TableColumn<Product, String> productUnitPriceColumn;
     @FXML
     private TableColumn<Product, String> productQuantityColumn;
+    @FXML
+    private TableColumn<Product, String> descriptionColumn;
+    @FXML
+    private TableColumn<Product, String> expireDateColumn;
+    @FXML
+    private TableColumn<Product, String> reorderPointColumn;
+    @FXML
+    private TableColumn<Product, String> surplusPointColumn;
 
     private double xOffset = 0;
     private double yOffset = 0;
 
+
+    public static String editableProductId = null;
+    public static String editableProductTitle = null;
+    public static String editableProductCategory = null;
+    public static String editableProductUnitPrice = null;
+    public static String editableProductQuantity = null;
+    public static String editableProductDescription = null;
+    public static String editableProductReorderPoint = null;
+    public static String editableProductSurplusPoint = null;
+    public static String editableProductExpireDate = null;
+    public static String editableStatus = null;
+
+
+
     ObservableList<String> criteriaList = FXCollections.observableArrayList("", "Title", "Type");
-    ObservableList<String> statusList = FXCollections.observableArrayList("", "Good","Expired","Damaged");
+
 
     @FXML
     private Button backBtn;
@@ -129,7 +151,7 @@ public class ProductController {
     }
 
     @FXML
-    public void addProduct(ActionEvent event) throws Exception {
+    public void addProduct() throws Exception {
 
         FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/addProduct.fxml")));
         Parent root = loader.load();
@@ -154,7 +176,7 @@ public class ProductController {
 
     //Search a product
     @FXML
-    private void searchProduct(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
+    private void searchProduct() throws ClassNotFoundException, SQLException {
 
         if (searchChoice.getValue().toString().equals("Title")) {
             try {
@@ -189,7 +211,7 @@ public class ProductController {
 
     //Search all products
     @FXML
-    private void searchProducts(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+    private void searchProducts() throws SQLException, ClassNotFoundException {
         try {
 
             ObservableList<Product> productData = ProductDAO.searchProducts();
@@ -208,15 +230,19 @@ public class ProductController {
     @FXML
     private void initialize() throws SQLException, ParseException {
 
-      //  typeBox.setItems(productType);
+
         searchChoice.setItems(criteriaList);
-        newStatus.setItems(statusList);
         productIdColumn.setCellValueFactory(cellData -> cellData.getValue().productIdProperty());
         productTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         productTypeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
         productUnitPriceColumn.setCellValueFactory(cellData -> cellData.getValue().unitPriceProperty());
         productQuantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityProperty());
         productStatusColumn.setCellValueFactory(cellData -> cellData.getValue().productStatusProperty());
+        descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+        expireDateColumn.setCellValueFactory(cellData -> cellData.getValue().expireDateProperty());
+        reorderPointColumn.setCellValueFactory(cellData -> cellData.getValue().reOrderPointProperty());
+        surplusPointColumn.setCellValueFactory(cellData -> cellData.getValue().surplusPointProperty());
+
 
 
         try {
@@ -285,26 +311,65 @@ public class ProductController {
         productTable.setItems(productData);
     }
 
+//
+//    //Update product's unit price and quantity is updated
+//    @FXML
+//    private void updateProduct(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+//        try {
+//            ProductDAO.updateProduct(productId.getText(), newUnitPrice.getText(), newQuantity.getText(), newStatus.getValue().toString());
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setTitle("Product update");
+//            alert.setHeaderText("Success message");
+//            alert.setContentText("The product " + productId.getText() + " was successfully updated!!");
+//            alert.showAndWait();
+//        } catch (SQLException e) {
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Product delete");
+//            alert.setHeaderText("Failure message");
+//            alert.setContentText("Problem occurred while updating product " + e);
+//            alert.showAndWait();
+//        }
+//    }
 
-    //Update product's unit price and quantity is updated
+
+
     @FXML
-    private void updateProduct(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        try {
-            ProductDAO.updateProduct(productId.getText(), newUnitPrice.getText(), newQuantity.getText(), newStatus.getValue().toString());
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Product update");
-            alert.setHeaderText("Success message");
-            alert.setContentText("The product " + productId.getText() + " was successfully updated!!");
-            alert.showAndWait();
-        } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Product delete");
-            alert.setHeaderText("Failure message");
-            alert.setContentText("Problem occurred while updating product " + e);
-            alert.showAndWait();
-        }
-    }
+    private void editAction() throws SQLException, ClassNotFoundException, IOException {
 
+        Product product = (Product) productTable.getSelectionModel().getSelectedItem();
+
+        editableProductId = product.getProductId();
+        editableProductTitle = product.getTitle();
+        editableProductCategory = product.getType();
+        editableProductUnitPrice = product.getUnitPrice();
+        editableProductQuantity = product.getQuantity();
+        editableProductDescription = product.getDescription();
+        editableProductReorderPoint = product.getReOrderPoint();
+        editableProductSurplusPoint = product.getSurplusPoint();
+        editableProductExpireDate = product.getExpireDate();
+        editableStatus = product.getProductStatus();
+
+
+
+        FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/editProduct.fxml")));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        root.setOnMousePressed((MouseEvent e) -> {
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent e) -> {
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Add Product");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(scene);
+        stage.showAndWait();
+
+    }
 
     @FXML
     private void insertProduct(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
@@ -328,7 +393,7 @@ public class ProductController {
 
 
     @FXML
-    private void deleteRow(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
+    private void deleteRow() throws ClassNotFoundException, SQLException {
 
         Product selectedItem = (Product) productTable.getSelectionModel().getSelectedItem();
         String id = ((Product) productTable.getSelectionModel().getSelectedItem()).getProductId();
@@ -366,17 +431,15 @@ public class ProductController {
     }
 
     @FXML
-    private void backAction(ActionEvent event) throws IOException {
+    private void backAction() throws IOException {
         Stage stage;
         Parent root;
 
-        if (event.getSource() == backBtn) {
-            stage = (Stage) backBtn.getScene().getWindow();
+            stage = (Stage) productTable.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 950, 550);
+            Scene scene = new Scene(root,1170, 600);
             stage.setScene(scene);
             stage.show();
-        }
 
     }
 

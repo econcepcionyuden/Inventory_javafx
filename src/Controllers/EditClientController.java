@@ -7,15 +7,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import util.ClientDAO;
+import util.UserDAO;
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.text.ParseException;
 
 /**
- * Created by jaliya on 12/28/17.
+ * Created by jaliya on 12/29/17.
  */
-public class AddClientController {
+public class EditClientController {
+
 
     @FXML
     private TextField clientId;
@@ -31,6 +32,48 @@ public class AddClientController {
     private Label errorLabel;
 
     @FXML
+    private void initialize() throws SQLException, ParseException {
+
+
+        clientId.setDisable(true);
+        ClientController cc = new ClientController();
+        clientId.setText(cc.editableClientId);
+        name.setText(cc.editableName);
+        company.setText(cc.editableCompany);
+        address.setText(cc.editableAddress);
+        contact.setText(cc.editableContactNo);
+    }
+
+    @FXML
+    private void updateClient(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+
+
+        if(validateInput()) {
+            try {
+
+                ClientDAO.updateClient(clientId.getText(), name.getText(), company.getText(), contact.getText(), address.getText());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Client update");
+                alert.setHeaderText("Success message");
+                alert.setContentText("The client was successfully updated!!");
+                alert.showAndWait();
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Client Update");
+                alert.setHeaderText("Failure message");
+                alert.setContentText("Problem occurred while updating client " + e);
+                alert.showAndWait();
+            }
+        }
+    }
+
+    @FXML
+    private void closeButtonAction() {
+        Stage stage = (Stage) clientId.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
     public void fieldsClear(ActionEvent actionEvent) {
         clientId.clear();
         name.clear();
@@ -40,46 +83,13 @@ public class AddClientController {
     }
 
     @FXML
-    private void addClient(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, NoSuchAlgorithmException {
-
-
-        if(validateInput()) {
-            try {
-                ClientDAO.addClient(clientId.getText(), name.getText(), company.getText(), address.getText(), contact.getText());
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Add client");
-                alert.setHeaderText("Success message");
-                alert.setContentText("The client " + clientId.getText() + " was successfully added!!");
-                alert.showAndWait();
-                clear();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Failure message");
-                alert.setContentText("Problem occurred while adding the client");
-                alert.showAndWait();
-                throw e;
-            }
-        }
-    }
-
-    @FXML
     public void clear() {
         clientId.clear();
         name.clear();
         company.clear();
         address.clear();
         contact.clear();
-        errorLabel.setText("");
     }
-
-    @FXML
-    private void closeButtonAction() {
-        Stage stage = (Stage) contact.getScene().getWindow();
-        stage.close();
-    }
-
 
     private boolean validateInput() {
         String errorMessage = "";

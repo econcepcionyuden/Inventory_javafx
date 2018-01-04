@@ -76,7 +76,7 @@ public class SaleController {
 
     //  Search a sale by date and id
     @FXML
-    private void searchSale(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
+    private void searchSale() throws ClassNotFoundException, SQLException {
 
         if (searchChoice.getValue().toString().equals("Date")) {
             try {
@@ -113,7 +113,7 @@ public class SaleController {
 
     //Search all sales
     @FXML
-    private void searchSales(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+    private void searchSales() throws SQLException, ClassNotFoundException {
         try {
 
             ObservableList<Sale> saleData = SaleDAO.searchSales();
@@ -258,17 +258,15 @@ public class SaleController {
 //    }
 
     @FXML
-    private void backAction2(ActionEvent event) throws IOException {
+    private void backAction2() throws IOException {
         Stage stage;
         Parent root;
 
-        if (event.getSource() == backBtn2) {
-            stage = (Stage) backBtn2.getScene().getWindow();
+            stage = (Stage) saleTable.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root, 950, 550);
+            Scene scene = new Scene(root, 1170, 600);
             stage.setScene(scene);
             stage.show();
-        }
 
     }
 

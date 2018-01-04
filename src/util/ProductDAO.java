@@ -179,73 +179,16 @@ public class ProductDAO {
 //
 //    }
 
-    public static void updateProduct(String productId, String unitPrice, String quantity, String status) throws SQLException, ClassNotFoundException {
+    public static void updateProduct(String productId, String description, String title, String unitPrice,String expireDate,String reorderPoint,String surplusPoint, String type,String quantity,String status) throws SQLException, ClassNotFoundException {
 
-
-        if (unitPrice.isEmpty() && status.isEmpty()) {
-            String updateStmt = "UPDATE product SET quantity = '" + quantity + "'  WHERE id = '" + productId + "'";
-            try {
-                DBUtil.dbExecuteUpdate(updateStmt);
-            } catch (SQLException e) {
-                System.out.print("Error occurred while UPDATE Operation: " + e);
-                throw e;
-            }
-
-        } else if (quantity.isEmpty() && status.isEmpty()) {
-            String updateStmt = "UPDATE product SET unit_price='" + unitPrice + "' WHERE id = '" + productId + "'";
-            try {
-                DBUtil.dbExecuteUpdate(updateStmt);
-            } catch (SQLException e) {
-                System.out.print("Error occurred while UPDATE Operation: " + e);
-                throw e;
-            }
-
-        } else if (quantity.isEmpty() && unitPrice.isEmpty()) {
-            String updateStmt = "UPDATE product SET status='" + status + "' WHERE id = '" + productId + "'";
-            try {
-                DBUtil.dbExecuteUpdate(updateStmt);
-            } catch (SQLException e) {
-                System.out.print("Error occurred while UPDATE Operation: " + e);
-                throw e;
-            }
-
-        } else if (unitPrice.isEmpty()) {
-            String updateStmt = "UPDATE product SET status='" + status + "',quantity ='" + quantity + "' WHERE id = '" + productId + "'";
-            try {
-                DBUtil.dbExecuteUpdate(updateStmt);
-            } catch (SQLException e) {
-                System.out.print("Error occurred while UPDATE Operation: " + e);
-                throw e;
-            }
-
-        } else if (status.isEmpty()) {
-            String updateStmt = "UPDATE product SET unit_price='" + unitPrice + "',quantity ='" + quantity + "' WHERE id = '" + productId + "'";
-            try {
-                DBUtil.dbExecuteUpdate(updateStmt);
-            } catch (SQLException e) {
-                System.out.print("Error occurred while UPDATE Operation: " + e);
-                throw e;
-            }
-
-        } else if (quantity.isEmpty()) {
-            String updateStmt = "UPDATE product SET status='" + status + "',quantity ='" + quantity + "' WHERE id = '" + productId + "'";
-            try {
-                DBUtil.dbExecuteUpdate(updateStmt);
-            } catch (SQLException e) {
-                System.out.print("Error occurred while UPDATE Operation: " + e);
-                throw e;
-            }
-
-        } else {
-
-            String updateStmt = "UPDATE product SET unit_price='" + unitPrice + "', quantity = '" + quantity + "',status='" + status + "'  WHERE id = '" + productId + "'";
-            try {
-                DBUtil.dbExecuteUpdate(updateStmt);
-            } catch (SQLException e) {
-                System.out.print("Error occurred while UPDATE Operation: " + e);
-                throw e;
-            }
+        String updateStmt = "UPDATE product SET description = '" + description + "',title = '" + title + "',unit_price = '" + unitPrice + "',expire_date = '" + expireDate + "',reorder_point = '" + reorderPoint + "',surplus_point = '" + surplusPoint + "',type = '" + type + "',quantity = '" + quantity + "',status = '" + status + "'  WHERE id = '" + productId + "'";
+        try {
+            DBUtil.dbExecuteUpdate(updateStmt);
+        } catch (SQLException e) {
+            System.out.print("Error occurred while UPDATE Operation: " + e);
+            throw e;
         }
+
     }
 
 
