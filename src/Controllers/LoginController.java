@@ -143,6 +143,11 @@ public class LoginController {
 
         String errorMessage = "";
 
+
+        if(!(userName.getText().matches("^[A-Za-z0-9\\s\\-_]+$")&&password.getText().matches("^[A-Za-z0-9\\s\\-_]+$"))){
+            errorMessage += "Inputs are not in the correct format!!\n";
+        }
+
         if (userName.getText().length() == 0 || password.getText().length() == 0) {
             errorMessage += "Please enter both credentials!\n";
         }

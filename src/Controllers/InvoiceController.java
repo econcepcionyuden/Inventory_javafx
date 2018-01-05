@@ -19,7 +19,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import models.Item;
 import models.Payment;
 import models.Product;
@@ -33,6 +35,7 @@ public class InvoiceController {
     private Payment payment;
 
     private double xOffset = 0;
+    private double yOffset = 0;
 
     POSController pos = new POSController();
     double netPrice = pos.finalNetPayablePrice;
@@ -50,12 +53,13 @@ public class InvoiceController {
 
     }
 //
-//    public void setData(double netPrice, ObservableList<Item> items, Payment payment) {
-//
-//        this.netPrice = netPrice;
-//        this.items = FXCollections.observableArrayList(items);
-//        this.payment = payment;
-//    }
+    public void setData(double netPrice, ObservableList<Item> items, Payment payment) {
+
+        POSController pos = new POSController();
+        this.netPrice = netPrice;
+        this.items = pos.itemList;
+        this.payment = payment;
+    }
 
     @FXML
     public void confirmAction(ActionEvent event) throws Exception {
@@ -76,9 +80,37 @@ public class InvoiceController {
             alert.setHeaderText("Success message");
             alert.setContentText("The transaction was successful!!");
             alert.showAndWait();
+
+            POSController pos = new POSController();
+            String invoiceId = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+            BillController controller = new BillController();
+            controller.setData(retail, pos.itemList, invoiceId);
+
+
+            FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/bill.fxml")));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            root.setOnMousePressed((MouseEvent e) -> {
+                xOffset = e.getSceneX();
+                yOffset = e.getSceneY();
+            });
+            root.setOnMouseDragged((MouseEvent e) -> {
+                stage.setX(e.getScreenX() - xOffset);
+                stage.setY(e.getScreenY() - yOffset);
+            });
+            Scene scene = new Scene(root);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Bill");
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(scene);
+            stage.showAndWait();
+
+
+
+
          //   pos.resetItemTable();
 
-//            String invoiceId = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+
 
 
 //            Invoice invoice = new Invoice(
@@ -113,8 +145,7 @@ public class InvoiceController {
 //            }
 
 //            FXMLLoader loader = new FXMLLoader((getClass().getResource("/fxml/Confirm.fxml")));
-//            ConfirmController controller = new ConfirmController();
-//            controller.setData(retail, items, invoiceId);
+
 //            loader.setController(controller);
 //            Parent root = loader.load();
 //            Scene scene = new Scene(root);

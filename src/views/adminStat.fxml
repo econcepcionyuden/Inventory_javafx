@@ -140,13 +140,5 @@
             <DropShadow />
          </effect>
       </ImageView>
-      <ImageView fitHeight="28.0" fitWidth="32.0" layoutX="511.0" layoutY="15.0" onMouseClicked="#minimizeAction" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Scenes/minimize-window-xxl.png" />
-         </image>
-         <effect>
-            <DropShadow />
-         </effect>
-      </ImageView>
    </children>
 </AnchorPane>

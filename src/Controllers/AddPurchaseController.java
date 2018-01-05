@@ -4,10 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import models.Product;
 import models.Vendor;
@@ -32,6 +29,8 @@ public class AddPurchaseController {
     private TextField amount;
     @FXML
     private TextField quantity;
+    @FXML
+    private Label errorLabel;
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDateTime now = LocalDateTime.now();
@@ -61,24 +60,27 @@ public class AddPurchaseController {
         int newQuantity = Integer.parseInt(product.getQuantity()) + Integer.parseInt(quantity.getText());
         String newQuantityString = String.valueOf(newQuantity);
 
-        try {
-            PurchaseDAO.purchase(productId.getValue().toString(), date, amount.getText(), quantity.getText(), vendorId.getValue().toString());
-            ProductDAO.updateProductAfterPurchasing(productId.getValue().toString(), newQuantityString);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Add purchase");
-            alert.setHeaderText("Success message");
-            alert.setContentText("The purchase of " + productId.getValue().toString() + " product was successfully added!!");
-            alert.showAndWait();
-            clear();
-        } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Failure message");
-            alert.setContentText("Error occurred while adding the transaction" + e);
-            alert.showAndWait();
-            throw e;
+        if (validateInput()) {
+            try {
+                PurchaseDAO.purchase(productId.getValue().toString(), date, amount.getText(), quantity.getText(), vendorId.getValue().toString());
+                ProductDAO.updateProductAfterPurchasing(productId.getValue().toString(), newQuantityString);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Add purchase");
+                alert.setHeaderText("Success message");
+                alert.setContentText("The purchase of " + productId.getValue().toString() + " product was successfully added!!");
+                alert.showAndWait();
+                clear();
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Failure message");
+                alert.setContentText("Error occurred while adding the transaction" + e);
+                alert.showAndWait();
+                throw e;
+            }
         }
     }
+
     @FXML
     private void closeButtonAction() {
         Stage stage = (Stage) vendorId.getScene().getWindow();
@@ -106,5 +108,16 @@ public class AddPurchaseController {
 
         productId.setItems(productList);
         vendorId.setItems(vendorList);
+    }
+
+    private boolean validateInput() {
+        String errorMessage = "";
+        if (productId.getValue().toString().matches("^[A-Za-z0-9\\s\\-_,-]+$")&&amount.getText().matches("^[0-9]{1,10}$")&&quantity.getText().matches("^[0-9]{1,10}$")&&vendorId.getValue().toString().matches("^[A-Za-z0-9\\s\\-_,-]+$")) {
+            return true;
+        } else {
+            errorMessage += "Invalid input entered!!\n";
+            errorLabel.setText(errorMessage);
+        }
+        return false;
     }
 }

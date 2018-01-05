@@ -119,7 +119,7 @@ public class AdminController {
         }else if (event.getSource() == posItem) {
             stage = (Stage) salesBtn.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/POS.fxml"));
-            Scene scene = new Scene(root,1070, 595);
+            Scene scene = new Scene(root,1070, 610);
             stage.setScene(scene);
             stage.show();
         } else if (event.getSource() == logoutItem) {

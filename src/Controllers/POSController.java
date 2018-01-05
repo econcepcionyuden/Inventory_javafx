@@ -1,17 +1,14 @@
 package Controllers;
 
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +18,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -32,8 +28,6 @@ import util.ClientDAO;
 import util.PaymentDAO;
 import util.ProductDAO;
 import util.SaleDAO;
-
-import javax.swing.text.html.ImageView;
 
 public class POSController {
 
@@ -56,7 +50,9 @@ public class POSController {
     @FXML
     private Button backBtn2;
     @FXML
-    private TableColumn<Item, Double> priceColumn, totalColumn;
+    private TableColumn<Item, Double> priceColumn;
+    @FXML
+    private TableColumn<Item, Double> totalColumn;
     @FXML
     private TableColumn<Item, Integer> quantityColumn;
     @FXML
@@ -82,6 +78,12 @@ public class POSController {
     public static double finalSubTotalPrice = 0.0;
     public static double finalVat = 0.0;
     public static double finalDiscount = 0.0;
+    public static List<String> itemNames = new ArrayList<>();
+    public static List<String> prices = new ArrayList<>();
+    public static List<String> quantities = new ArrayList<>();
+    public static List<String> subTotals = new ArrayList<>();
+    public static ObservableList<Item> itemList;
+
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDateTime now = LocalDateTime.now();
@@ -134,6 +136,7 @@ public class POSController {
         clientId.setItems(clientList);
         productColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         ITEMLIST = FXCollections.observableArrayList();
+        itemList = ITEMLIST;
 
         ObservableList<Product> productData = ProductDAO.searchProducts();
 
@@ -273,6 +276,10 @@ public class POSController {
         finalSubTotalPrice = 0.0;
         finalVat = 0.0;
         finalDiscount = 0.0;
+        itemNames = null;
+        prices = null;
+        quantities = null;
+        subTotals = null;
 
     }
 //
@@ -461,39 +468,22 @@ public class POSController {
 
             ObservableList<Item> sold = listTableView.getItems();
 
-            FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/invoice.fxml")));
-//        InvoiceController controller = new InvoiceController();
-//        loader.setController(controller);
-//        controller.setData(Double.parseDouble(netPayableField.getText().trim()), sold, payment);
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            root.setOnMousePressed((MouseEvent e) -> {
-                xOffset = e.getSceneX();
-                yOffset = e.getSceneY();
-            });
-            root.setOnMouseDragged((MouseEvent e) -> {
-                stage.setX(e.getScreenX() - xOffset);
-                stage.setY(e.getScreenY() - yOffset);
-            });
-            Scene scene = new Scene(root);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Payment");
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setScene(scene);
-            stage.showAndWait();
-
-//        resetInterface();
-
-
-            // String itemName [] = new String[0];
-
             TableColumn<Item, String> column1 = itemColumn;
             TableColumn<Item, Integer> column2 = quantityColumn;
+            TableColumn<Item, Double> column3 = priceColumn;
+            TableColumn<Item, Double> column4 = totalColumn;
             List<String> columnItemData = new ArrayList<>();
             List<String> columnQuantityData = new ArrayList<>();
             for (Item item : listTableView.getItems()) {
                 columnItemData.add(column1.getCellObservableValue(item).getValue());
                 columnQuantityData.add(String.valueOf(column2.getCellObservableValue(item).getValue()));
+            }
+
+            for (Item item : listTableView.getItems()) {
+                itemNames.add(column1.getCellObservableValue(item).getValue());
+                quantities.add(String.valueOf(column2.getCellObservableValue(item).getValue()));
+                prices.add(String.valueOf(column3.getCellObservableValue(item).getValue()));
+                subTotals.add(String.valueOf(column4.getCellObservableValue(item).getValue()));
             }
 
             for (int i = 0; i < columnItemData.size(); i++) {
@@ -519,6 +509,26 @@ public class POSController {
                     throw e;
                 }
             }
+
+            FXMLLoader loader = new FXMLLoader((getClass().getResource("../views/invoice.fxml")));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            root.setOnMousePressed((MouseEvent e) -> {
+                xOffset = e.getSceneX();
+                yOffset = e.getSceneY();
+            });
+            root.setOnMouseDragged((MouseEvent e) -> {
+                stage.setX(e.getScreenX() - xOffset);
+                stage.setY(e.getScreenY() - yOffset);
+            });
+            Scene scene = new Scene(root);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Payment");
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(scene);
+            stage.showAndWait();
+
+
 
         }
     }

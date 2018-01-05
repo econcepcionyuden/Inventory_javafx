@@ -36,6 +36,8 @@ public class EditProductController {
     private TextField quantity;
     @FXML
     private ComboBox<String> status;
+    @FXML
+    private Label errorLabel;
 
 
 
@@ -61,23 +63,25 @@ public class EditProductController {
 
     @FXML
     private void updateProduct(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        try {
 
-            ProductDAO.updateProduct(insertProductId.getText(),description.getText(),title.getText(),unitPrice.getText(),expireDate.getValue().toString(), reOrderPoint.getText(), surplusPoint.getText(),typeBox.getValue().toString(),quantity.getText(), status.getValue().toString());
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Product update");
-            alert.setHeaderText("Success message");
-            alert.setContentText("The product " + insertProductId.getText() + " was successfully updated!!");
-            alert.showAndWait();
-        } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Product delete");
-            alert.setHeaderText("Failure message");
-            alert.setContentText("Problem occurred while updating product " + e);
-            alert.showAndWait();
+        if (validateInput()) {
+            try {
+
+                ProductDAO.updateProduct(insertProductId.getText(), description.getText(), title.getText(), unitPrice.getText(), expireDate.getValue().toString(), reOrderPoint.getText(), surplusPoint.getText(), typeBox.getValue().toString(), quantity.getText(), status.getValue().toString());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Product update");
+                alert.setHeaderText("Success message");
+                alert.setContentText("The product " + insertProductId.getText() + " was successfully updated!!");
+                alert.showAndWait();
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Product delete");
+                alert.setHeaderText("Failure message");
+                alert.setContentText("Problem occurred while updating product " + e);
+                alert.showAndWait();
+            }
         }
     }
-
 
     @FXML
     public void fieldsClear(ActionEvent actionEvent) {
@@ -111,5 +115,17 @@ public class EditProductController {
     private void closeButtonAction() {
         Stage stage = (Stage) description.getScene().getWindow();
         stage.close();
+    }
+
+
+    private boolean validateInput() {
+        String errorMessage = "";
+        if (title.getText().matches("^[A-Za-z0-9\\s\\-_,-]+$")&&unitPrice.getText().matches("^[0-9]{1,10}$")&&quantity.getText().matches("^[0-9]{1,10}$")&&description.getText().matches("^[A-Za-z0-9\\s\\-_,-]+$")&&typeBox.getValue().toString().matches("^[a-zA-Z\\s]+") && reOrderPoint.getText().matches("^[0-9]{1,10}$")&& expireDate.getValue().toString().matches("^(19[5-9][0-9]|20[0-4][0-9]|2050)[-/](0?[1-9]|1[0-2])[-/](0?[1-9]|[12][0-9]|3[01])$")&& surplusPoint.getText().matches("^[0-9]{1,10}$")) {
+            return true;
+        } else {
+            errorMessage += "Invalid input entered!!\n";
+            errorLabel.setText(errorMessage);
+        }
+        return false;
     }
 }
