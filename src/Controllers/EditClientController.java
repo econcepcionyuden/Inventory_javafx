@@ -57,6 +57,7 @@ public class EditClientController {
                 alert.setHeaderText("Success message");
                 alert.setContentText("The client was successfully updated!!");
                 alert.showAndWait();
+                errorLabel.setText("");
             } catch (SQLException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Client Update");
@@ -65,6 +66,24 @@ public class EditClientController {
                 alert.showAndWait();
             }
         }
+    }
+
+
+    private boolean validateInput() {
+        String errorMessage = "";
+        if (!(name.getText() == null || name.getText().length() == 0 || company.getText() == null || company.getText().length() == 0 || address.getText() == null || address.getText().length() == 0 || contact.getText() == null || contact.getText().length() == 0)) {
+
+            if (name.getText().matches("^[a-zA-Z\\s]+")&&company.getText().matches("^[a-zA-Z\\s]+")&&address.getText().matches("^[a-zA-Z\\s]+")&&contact.getText().matches("^[0-9]{10,15}$")) {
+                return true;
+            } else {
+                errorMessage += "Invalid input entered!!\n";
+                errorLabel.setText(errorMessage);
+            }
+            return false;
+        }
+        errorMessage += "Please fill all required fields!\n";
+        errorLabel.setText(errorMessage);
+        return false;
     }
 
     @FXML
@@ -91,15 +110,5 @@ public class EditClientController {
         contact.clear();
     }
 
-    private boolean validateInput() {
-        String errorMessage = "";
-        if (name.getText().matches("^[a-zA-Z\\s]+")&&company.getText().matches("^[a-zA-Z\\s]+")&&address.getText().matches("^[a-zA-Z\\s]+")&&contact.getText().matches("^[0-9]{10,15}$")) {
-            return true;
-        } else {
-            errorMessage += "Invalid input entered!!\n";
-            errorLabel.setText(errorMessage);
-        }
-        return false;
-    }
 
 }

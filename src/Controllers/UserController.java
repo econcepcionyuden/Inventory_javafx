@@ -53,8 +53,6 @@ public class UserController {
     @FXML
     private TableView userTable;
     @FXML
-    private TableColumn<User, String> userIdColumn;
-    @FXML
     private TableColumn<User, String> firstNameColumn;
     @FXML
     private TableColumn<User, String> lastNameColumn;
@@ -254,7 +252,6 @@ public class UserController {
     private void initialize() throws SQLException {
 
         searchChoice.setItems(criteriaList);
-        userIdColumn.setCellValueFactory(cellData -> cellData.getValue().userIdProperty());
         firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
         lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
         roleColumn.setCellValueFactory(cellData -> cellData.getValue().roleProperty());

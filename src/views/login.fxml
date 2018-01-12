@@ -27,7 +27,7 @@
          </effect></Label>
       <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="398.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Scenes/user-xxl.png" />
+            <Image url="@../Scenes/default-user.png" />
          </image>
          <effect>
             <DropShadow />

@@ -6,6 +6,9 @@ import models.Client;
 import models.Sale;
 import models.User;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -45,6 +48,22 @@ public class UserDAO {
         }
     }
 
+
+    public static User searchUserById(String id) throws SQLException, ClassNotFoundException {
+
+        String selectStmt = "SELECT * FROM user WHERE id='"+id+"'";
+
+        try {
+            ResultSet rsUser = DBUtil.dbExecuteQuery(selectStmt);
+            User user = getUserFromResultSet(rsUser);
+            return user;
+        } catch (SQLException e) {
+            System.out.println("While searching an user with '" + id + "' id, an error occurred: " + e);
+            throw e;
+        }
+    }
+
+
     public static void updateUser(int userId, String firstName, String lastName, String role,String password,String contact,String address) throws SQLException, ClassNotFoundException {
 
         String updateStmt = "UPDATE user SET first_name = '" + firstName + "',last_name = '" + lastName + "',role = '" + role + "',password = md5('" + password + "'),contact = '" + contact + "',address = '" + address + "' WHERE id = '" + userId + "'";
@@ -57,6 +76,17 @@ public class UserDAO {
 
     }
 
+    public static void updateUserWithImage(int userId, String firstName, String lastName, String role,String password,String contact,String address, String filePath) throws SQLException, ClassNotFoundException {
+
+        String updateStmt = "UPDATE user SET first_name = '" + firstName + "',last_name = '" + lastName + "',role = '" + role + "',password = md5('" + password + "'),contact = '" + contact + "',address = '" + address + "',pro_pic = '" + filePath + "' WHERE id = '" + userId + "'";
+        try {
+            DBUtil.dbExecuteUpdate(updateStmt);
+        } catch (SQLException e) {
+            System.out.print("Error occurred while UPDATE Operation: " + e);
+            throw e;
+        }
+
+    }
 
     private static User getUserFromResultSet(ResultSet rs) throws SQLException
     {
@@ -67,7 +97,10 @@ public class UserDAO {
             user.setFirstName(rs.getString("first_name"));
             user.setLastName(rs.getString("last_name"));
             user.setRole(rs.getString("role"));
+            user.setAddress(rs.getString("address"));
+            user.setContactNo(rs.getString("contact"));
             user.setPassword(rs.getString("password"));
+            user.setPicLocation(rs.getString("pro_pic"));
 
         }
         return user;
@@ -122,9 +155,9 @@ public class UserDAO {
     }
 
 
-    public static void addUser(String firstName,String lastName, String role, String password, String contact, String address) throws SQLException, ClassNotFoundException {
+    public static void addUser(String firstName,String lastName, String role, String password, String contact, String address, String picLocation) throws SQLException, ClassNotFoundException {
 
-        String updateStmt = "INSERT INTO user(first_name,last_name,role,password,contact,address) VALUES('"+firstName+"','"+lastName+"','"+role+"',md5('"+password+"'),'"+contact+"','"+address+"')";
+        String updateStmt = "INSERT INTO user(first_name,last_name,role,password,contact,address,pro_pic) VALUES('"+firstName+"','"+lastName+"','"+role+"',md5('"+password+"'),'"+contact+"','"+address+"','"+picLocation+"')";
         try {
             DBUtil.dbExecuteUpdate(updateStmt);
         } catch (SQLException e) {

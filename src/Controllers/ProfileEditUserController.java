@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import models.User;
+import util.DBUtil;
 import util.UserDAO;
 
 import javax.imageio.ImageIO;
@@ -27,7 +29,7 @@ import java.util.logging.Logger;
 /**
  * Created by jaliya on 12/29/17.
  */
-public class EditUserController {
+public class ProfileEditUserController {
 
     @FXML
     private TextField firstName;
@@ -44,23 +46,64 @@ public class EditUserController {
     @FXML
     private Label errorLabel;
 
+    @FXML
+    private ImageView pic;
+
+    private Image image;
+    private FileInputStream fis;
+    private File file;
+
+
     ObservableList<String> newRoleList = FXCollections.observableArrayList("", "Admin", "Operator");
 
-    @FXML
-    private void initialize() throws SQLException, ParseException {
 
+    @FXML
+    private void initialize() throws SQLException, ParseException, ClassNotFoundException, FileNotFoundException {
+
+        LoginController lg = new LoginController();
+        User user = UserDAO.searchUserById(lg.userId);
+        String id = user.getUserId();
 
         role.setItems(newRoleList);
-        UserController uc = new UserController();
         //password.setText(uc.editablePassword);
-        firstName.setText(uc.editableFirstName);
-        lastName.setText(uc.editableLastName);
-        role.setValue(uc.editableRole);
-        contactNo.setText(uc.editableContactNo);
-        address.setText(uc.editableAddress);
+        firstName.setText(user.getFirstName());
+        lastName.setText(user.getLastName());
+        role.setValue(user.getRole());
+        contactNo.setText(user.getContactNo());
+        address.setText(user.getAddress());
+
+        Image image = new Image(new FileInputStream(user.getPicLocation()));
+        pic.setImage(image);
     }
 
+    @FXML
+    private void browse(ActionEvent actionEvent)  {
 
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilterJPG =
+                new FileChooser.ExtensionFilter("JPG files (*.JPG)", "*.JPG");
+        FileChooser.ExtensionFilter extFilterjpg =
+                new FileChooser.ExtensionFilter("jpg files (*.jpg)", "*.jpg");
+        FileChooser.ExtensionFilter extFilterPNG =
+                new FileChooser.ExtensionFilter("PNG files (*.PNG)", "*.PNG");
+        FileChooser.ExtensionFilter extFilterpng =
+                new FileChooser.ExtensionFilter("png files (*.png)", "*.png");
+        fileChooser.getExtensionFilters()
+                .addAll(extFilterJPG, extFilterjpg, extFilterPNG, extFilterpng);
+
+        file = fileChooser.showOpenDialog(null);
+
+        try {
+            BufferedImage bufferedImage = ImageIO.read(file);
+            Image image = SwingFXUtils.toFXImage(bufferedImage, null);
+            pic.setImage(image);
+        } catch (IOException ex) {
+            Logger.getLogger(EditUserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+
+    }
 
     @FXML
     public void fieldsClear(ActionEvent actionEvent) {
@@ -90,13 +133,12 @@ public class EditUserController {
     private void updateUser(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, FileNotFoundException {
 
 
-        UserController uc = new UserController();
-        int id = Integer.parseInt(uc.editableUserId);
+        LoginController lg = new LoginController();
+        int id = Integer.parseInt(lg.userId);
 
         if (validateInput()&&validatePassword()) {
             try {
-
-                UserDAO.updateUser(id, firstName.getText(), lastName.getText(), role.getValue().toString(), password.getText(), contactNo.getText(), address.getText());
+                UserDAO.updateUserWithImage(id, firstName.getText(), lastName.getText(), role.getValue().toString(), password.getText(), contactNo.getText(), address.getText(), file.getPath());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("User update");
                 alert.setHeaderText("Success message");
@@ -129,7 +171,6 @@ public class EditUserController {
         errorLabel.setText(errorMessage);
         return false;
     }
-
 
     private boolean validatePassword() {
         String errorMessage = "";

@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 import models.Item;
 
 public class BillController implements Initializable {
@@ -18,9 +19,16 @@ public class BillController implements Initializable {
     private TextArea billingArea;
     @FXML
     private Label retailLabel;
+
     private static double retail;
     private static ObservableList<Item> items;
     private static String barcode;
+
+    POSController pos = new POSController();
+    double netPrice = pos.finalNetPayablePrice;
+    double subTotal = pos.finalSubTotalPrice;
+    double vat = pos.finalVat;
+    double discount = pos.finalDiscount;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -61,13 +69,20 @@ public class BillController implements Initializable {
         this.retail = retail;
         this.items = items;
         this.barcode = barcode;
+
     }
 
     @FXML
     public void doneAction(ActionEvent event) {
         billingArea.setText("");
-        PrintController pi = new PrintController(items, barcode);
+        PrintController pi = new PrintController(items, barcode,subTotal,netPrice,vat,discount);
         pi.generateReport();
         ((Node) (event.getSource())).getScene().getWindow().hide();
+    }
+
+    @FXML
+    private void closeButtonAction() {
+        Stage stage = (Stage) retailLabel.getScene().getWindow();
+        stage.close();
     }
 }

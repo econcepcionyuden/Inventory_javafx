@@ -16,13 +16,12 @@
    <children>
       <VBox layoutX="97.0" layoutY="24.0" spacing="4.0" />
       <TableView fx:id="userTable" editable="true" layoutX="13.0" layoutY="138.0" prefHeight="287.0" prefWidth="719.0" stylesheets="@../Scenes/style.css" tableMenuButtonVisible="true">
-         <columns> 
-            <TableColumn fx:id="userIdColumn" prefWidth="57.0" text="Id" />
+         <columns>
             <TableColumn fx:id="firstNameColumn" prefWidth="96.0" text="First Name" />
             <TableColumn fx:id="lastNameColumn" prefWidth="121.0" text="Last Name" />
             <TableColumn fx:id="roleColumn" prefWidth="88.0" text="Role" />
             <TableColumn fx:id="contactColumn" prefWidth="116.0" text="Contact" />
-            <TableColumn fx:id="addressColumn" prefWidth="212.0" text="Address" />
+            <TableColumn fx:id="addressColumn" prefWidth="280.0" text="Address" />
          </columns>
       </TableView>
       <ChoiceBox fx:id="searchChoice" layoutX="303.0" layoutY="100.0" prefWidth="150.0" />

@@ -8,10 +8,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
+import models.MonthlyRecord;
 import models.Purchase;
 import models.Sale;
+import models.SalesRecord;
 import util.ProductDAO;
 import util.PurchaseDAO;
 import util.ReportDAO;
@@ -22,7 +25,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by jaliya on 12/5/17.
@@ -30,7 +32,14 @@ import java.util.List;
 public class ReportController {
 
     @FXML
-    private Button backBtn2;
+    private DatePicker fromDate;
+    @FXML
+    private DatePicker toDate;
+    @FXML
+    private ComboBox type;
+
+
+    ObservableList<String> reportType = FXCollections.observableArrayList("", "Buying", "Selling", "Monthly summary");
 
 
 //    @FXML
@@ -53,7 +62,88 @@ public class ReportController {
 //    }
 
     @FXML
-    private void updateMonthlyRecord(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+    private void generateReport(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
+
+        if (type.getValue().toString().equals("Buying")) {
+
+            try {
+                ObservableList<Purchase> purchaseData = ReportDAO.getMonthlyPurchase(fromDate.getValue().toString(), toDate.getValue().toString());
+                GeneratePurchaseReport gp = new GeneratePurchaseReport(fromDate.getValue().toString(), toDate.getValue().toString(), purchaseData);
+                gp.generatePurchaseReport();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Purchase Report");
+                alert.setHeaderText("Success message");
+                alert.setContentText("The purchase report from " + fromDate.getValue().toString() + " to " + toDate.getValue().toString() + " was successfully created!!");
+                alert.showAndWait();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Failure message");
+                alert.setContentText("Problem occurred while creating the purchase report");
+                alert.showAndWait();
+                throw e;
+            }
+
+
+        } else if (type.getValue().toString().equals("Selling")) {
+
+            try {
+                ObservableList<SalesRecord> salesData = ReportDAO.getMonthlySales(fromDate.getValue().toString(), toDate.getValue().toString());
+                GenerateSalesReport gp = new GenerateSalesReport(fromDate.getValue().toString(), toDate.getValue().toString(), salesData);
+                gp.generateSalesReport();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sales Report");
+                alert.setHeaderText("Success message");
+                alert.setContentText("The sales report from " + fromDate.getValue().toString() + " to " + toDate.getValue().toString() + " was successfully created!!");
+                alert.showAndWait();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Failure message");
+                alert.setContentText("Problem occurred while creating the sales report");
+                alert.showAndWait();
+                throw e;
+            }
+
+        } else {
+
+            String fromDateV = fromDate.getValue().toString();
+            String[] monthV = fromDateV.split("-", 3);
+            String fromMonth = monthV[1];
+            String fromYear = monthV[0];
+
+            String toDateV = toDate.getValue().toString();
+            String[] monthT = toDateV.split("-", 3);
+            String toMonth = monthT[1];
+            String toYear = monthT[0];
+
+            try {
+                ObservableList<MonthlyRecord> recordsData = ReportDAO.monthlyRecordsBYRange(fromDateV,toDateV);
+                GenerateMonthlyReport mr = new GenerateMonthlyReport(fromMonth, toMonth, recordsData,fromYear,toYear);
+                mr.generateMonthlyReport();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Monthly Report");
+                alert.setHeaderText("Success message");
+                alert.setContentText("The monthly report from was successfully created!!");
+                alert.showAndWait();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Failure message");
+                alert.setContentText("Problem occurred while creating the monthly report");
+                alert.showAndWait();
+                throw e;
+            }
+        }
+
+    }
+
+
+    @FXML
+    private void updateMonthlyRecord() throws SQLException, ClassNotFoundException {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
@@ -122,7 +212,7 @@ public class ReportController {
 
 
             try {
-                ReportDAO.insertMonthlyRecord(year, month, totalExpenseString, totalIncomeString, stringGrossProfit, stringAssetTurnoverRatio, inventoryStatusRatio,productNoString,expiredProductNoString,damagedProductNoString);
+                ReportDAO.insertMonthlyRecord(year, month, totalExpenseString, totalIncomeString, stringGrossProfit, stringAssetTurnoverRatio, inventoryStatusRatio, productNoString, expiredProductNoString, damagedProductNoString);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Monthly Record");
                 alert.setHeaderText("Success message");
@@ -154,35 +244,34 @@ public class ReportController {
     @FXML
     private void initialize() throws SQLException, ClassNotFoundException, IOException {
 
+        type.setItems(reportType);
 
     }
 
 
     @FXML
-    private void backAction2(ActionEvent event) throws IOException {
+    private void backAction2() throws IOException {
         Stage stage;
         Parent root;
 
-        if (event.getSource() == backBtn2) {
-            stage = (Stage) backBtn2.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
-            Scene scene = new Scene(root,1170, 600);
-            stage.setScene(scene);
-            stage.show();
-        }
+        stage = (Stage) toDate.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("../views/admin.fxml"));
+        Scene scene = new Scene(root, 1170, 600);
+        stage.setScene(scene);
+        stage.show();
 
     }
 
 
     @FXML
     private void closeButtonAction() {
-        Stage stage = (Stage) backBtn2.getScene().getWindow();
+        Stage stage = (Stage) toDate.getScene().getWindow();
         stage.close();
     }
 
     @FXML
     private void minimizeAction() {
-        Stage stage = (Stage) backBtn2.getScene().getWindow();
+        Stage stage = (Stage) toDate.getScene().getWindow();
         stage.setIconified(true);
     }
 }

@@ -11,6 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -18,8 +20,10 @@ import javafx.stage.StageStyle;
 import models.MonthlyRecord;
 import models.Purchase;
 import models.Sale;
+import models.User;
 import util.*;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -77,6 +81,8 @@ public class AdminController {
     @FXML
     private MenuItem posItem;
     @FXML
+    private MenuItem profile;
+    @FXML
     private TextField saleCount;
     @FXML
     private TextField purchaseCount;
@@ -88,6 +94,10 @@ public class AdminController {
     private Button vendorsBtn;
     @FXML
     private Button clientsBtn;
+    @FXML
+    private ImageView proPic;
+    @FXML
+    private Label userName;
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -116,6 +126,9 @@ public class AdminController {
             Scene scene = new Scene(root, 1045, 565);
             stage.setScene(scene);
             stage.show();
+        }else if (event.getSource() == profile) {
+            stage = (Stage) salesBtn.getScene().getWindow();
+            root = FXMLLoader.load(getClass().getResource("../views/userProfile.fxml"));
         }else if (event.getSource() == posItem) {
             stage = (Stage) salesBtn.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../views/POS.fxml"));
@@ -189,6 +202,11 @@ public class AdminController {
     @FXML
     private void initialize() throws SQLException, ClassNotFoundException, IOException {
 
+        LoginController lg = new LoginController();
+        User user = UserDAO.searchUserById(lg.userId);
+        Image image = new Image(new FileInputStream(user.getPicLocation()));
+        proPic.setImage(image);
+        userName.setText(user.getFirstName());
 
         String month = String.valueOf(Calendar.getInstance().get(Calendar.MONTH) + 1);
         String previousMonth = String.valueOf(Calendar.getInstance().get(Calendar.MONTH));
@@ -273,8 +291,6 @@ public class AdminController {
         inventoryPieChart.setData(pieChartData);
         inventoryPieChart.setLabelLineLength(5);
 
-
-        //record analysis
 
         ObservableList<MonthlyRecord> monthlyRecordsData = ReportDAO.monthlyRecords();
         XYChart.Series series1 = new XYChart.Series();

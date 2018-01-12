@@ -21,14 +21,6 @@
       <Separator prefHeight="139.0" prefWidth="1176.0" />
       <Separator layoutX="-3.0" layoutY="1.0" orientation="VERTICAL" prefHeight="394.0" prefWidth="122.0" />
       <Label alignment="CENTER" prefHeight="69.0" prefWidth="131.0" style="-fx-border-color: #BFC9CA; -fx-background-color: #3498DB; -fx-text-fill: #FDFEFE;" text="D A S H B O A R D" />
-      <ImageView fitHeight="38.0" fitWidth="61.0" layoutX="904.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Scenes/administrator-xxl.png" />
-         </image>
-         <effect>
-            <DropShadow />
-         </effect>
-      </ImageView>
       <JFXButton fx:id="productsBtn" layoutY="71.0" onAction="#handleNavigation" prefHeight="73.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" text="    INVENTORY" textFill="#f8f6f6" />
       <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="12.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -102,7 +94,7 @@
       </AreaChart>
       <MenuButton layoutX="948.0" layoutY="25.0" mnemonicParsing="false" text="A D M I N">
         <items>
-          <MenuItem mnemonicParsing="false" text="Profile" />
+          <MenuItem fx:id="profile" mnemonicParsing="false" onAction="#handleNavigation" text="Profile" />
            <MenuItem fx:id="posItem" mnemonicParsing="false" onAction="#handleNavigation" text="POS" />
           <MenuItem fx:id="logoutItem" mnemonicParsing="false" onAction="#handleNavigation" text="Logout" />
 
@@ -133,5 +125,7 @@
       <Separator layoutX="130.0" layoutY="336.0" prefHeight="3.0" prefWidth="1048.0" />
       <Separator layoutX="641.0" layoutY="71.0" orientation="VERTICAL" prefHeight="539.0" prefWidth="14.0" />
       <JFXButton fx:id="clientsBtn1" layoutY="541.0" onAction="#handleNavigation" prefHeight="68.0" prefWidth="131.0" style="-fx-background-color: #34495E; -fx-border-color: #FDFEFE;" textFill="#f8f6f6" />
+      <ImageView fx:id="proPic" fitHeight="46.0" fitWidth="38.0" layoutX="891.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="userName" layoutX="887.0" layoutY="48.0" prefHeight="18.0" prefWidth="56.0" />
    </children>
 </AnchorPane>

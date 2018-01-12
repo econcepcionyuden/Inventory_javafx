@@ -3,6 +3,7 @@ package Controllers;
 import javafx.fxml.FXMLLoader;
 
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -18,16 +19,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.*;
 import org.controlsfx.control.textfield.TextFields;
-import util.ClientDAO;
-import util.PaymentDAO;
-import util.ProductDAO;
-import util.SaleDAO;
+import util.*;
 
 public class POSController {
 
@@ -66,10 +66,17 @@ public class POSController {
     @FXML
     private Label quantityLabel;
     @FXML
+    private Label errorLabel;
+    @FXML
+    private MenuItem profile;
+    @FXML
     private ObservableList<Item> ITEMLIST;
     @FXML
     private TableColumn<Product, String> productColumn;
-    // private ProductModel productModel;
+    @FXML
+    private ImageView proPic;
+    @FXML
+    private Label userName;
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -120,9 +127,16 @@ public class POSController {
 
         String role = LoginController.sessionRole;
 
+        LoginController lg = new LoginController();
+        User user = UserDAO.searchUserById(lg.userId);
+
+
         if (role.equals("Operator")) {
             backImage.setVisible(false);
             menuButton.setText(role);
+            Image image = new Image(new FileInputStream(user.getPicLocation()));
+            proPic.setImage(image);
+            userName.setText(user.getFirstName());
         } else {
             menuButton.setVisible(false);
         }
@@ -276,10 +290,11 @@ public class POSController {
         finalSubTotalPrice = 0.0;
         finalVat = 0.0;
         finalDiscount = 0.0;
-        itemNames = null;
-        prices = null;
-        quantities = null;
-        subTotals = null;
+        itemNames = new ArrayList<>();
+        prices = new ArrayList<>();
+        quantities = new ArrayList<>();
+        subTotals = new ArrayList<>();
+        clientId.setValue("");
 
     }
 //
@@ -324,7 +339,7 @@ public class POSController {
         quantityLabel.setText("");
         descriptionArea.clear();
         quantityField.clear();
-        clientId.setValue("");
+
 
     }
 
@@ -348,8 +363,9 @@ public class POSController {
 
         String errorMessage = "";
 
-        if (quantityField.getText() == null || quantityField.getText().length() == 0) {
-            errorMessage += "Please fill the quantity!\n";
+        if (quantityField.getText() == null || quantityField.getText().length() == 0 || !quantityField.getText().matches("^[0-9]{1,10}$")) {
+            errorMessage += "Invalid number of quantity!\n";
+
         } else {
             double quantity = Double.parseDouble(quantityField.getText());
             String available = quantityLabel.getText();
@@ -587,6 +603,19 @@ public class POSController {
             stage.setScene(scene);
             stage.show();
 
+    }
+
+    @FXML
+    private void handleNavigation(ActionEvent event) throws IOException {
+        Stage stage;
+        Parent root;
+        if (event.getSource() == profile) {
+            stage = (Stage) listTableView.getScene().getWindow();
+            root = FXMLLoader.load(getClass().getResource("../views/userProfile.fxml"));
+            Scene scene = new Scene(root, 775, 500);
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     @FXML

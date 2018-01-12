@@ -32,6 +32,7 @@ public class LoginController {
 
 
     public static String sessionRole = null;
+    public static String userId = null;
 
 
     @FXML
@@ -78,7 +79,9 @@ public class LoginController {
                 }
 
                 String role = user.getRole();
+                String id = user.getUserId();
                 sessionRole = role;
+                userId = id;
 
                 if (sb.toString().equals(userPassword)) {
 

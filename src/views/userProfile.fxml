@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="503.0" prefWidth="790.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProfileController">
+   <children>
+      <Label layoutX="33.0" layoutY="38.0" prefHeight="29.0" prefWidth="204.0" text="USER PROFILE" textFill="#fcf9f9">
+         <font>
+            <Font name="System Bold" size="23.0" />
+         </font>
+         <effect>
+            <DropShadow />
+         </effect>
+      </Label>
+      <Label layoutX="39.0" layoutY="206.0" text="Last Name" textFill="#fffefe" />
+      <Label layoutX="40.0" layoutY="252.0" text="Address" textFill="#fffdfd" />
+      <Label layoutX="40.0" layoutY="294.0" text="Role" textFill="#f2eeee" />
+      <Label layoutX="40.0" layoutY="337.0" text="Contact no" textFill="#fffbfb" />
+      <Label layoutX="37.0" layoutY="152.0" text="First Name " textFill="#fcf9f9" />
+      <Label layoutX="41.0" layoutY="399.0" text="Permissions" textFill="#fffbfb" />
+      <Label fx:id="firstName" layoutX="196.0" layoutY="145.0" prefHeight="29.0" prefWidth="226.0" />
+      <Label fx:id="address" layoutX="199.0" layoutY="244.0" prefHeight="29.0" prefWidth="226.0" />
+      <Label fx:id="contact" layoutX="198.0" layoutY="331.0" prefHeight="29.0" prefWidth="226.0" />
+      <Label fx:id="role" layoutX="198.0" layoutY="290.0" prefHeight="29.0" prefWidth="226.0" />
+      <Label fx:id="lastName" layoutX="197.0" layoutY="193.0" prefHeight="29.0" prefWidth="226.0" />
+      <CheckBox fx:id="pos" layoutX="197.0" layoutY="398.0" mnemonicParsing="false" text="POS" />
+      <CheckBox fx:id="userCheck" layoutX="197.0" layoutY="432.0" mnemonicParsing="false" text="User Privilages" />
+      <CheckBox fx:id="inventory" layoutX="337.0" layoutY="395.0" mnemonicParsing="false" text="Inventory Privilages" />
+      <CheckBox fx:id="stakeholder" layoutX="337.0" layoutY="429.0" mnemonicParsing="false" text="Stakeholder Privilages" />
+      <CheckBox fx:id="report" layoutX="529.0" layoutY="396.0" mnemonicParsing="false" text="Report Privilages" />
+      <ImageView fitHeight="28.0" fitWidth="26.0" layoutX="705.0" layoutY="447.0" onMouseClicked="#editAction" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/edit-property-xxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <Label layoutX="678.0" layoutY="477.0" prefHeight="16.0" prefWidth="84.0" text="Edit Details" textFill="#f8f8f8" />
+      <ImageView fitHeight="36.0" fitWidth="45.0" layoutX="15.0" layoutY="455.0" onMouseClicked="#backAction2" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/backxxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="28.0" fitWidth="27.0" layoutX="730.0" layoutY="16.0" onMouseClicked="#closeButtonAction" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/close-window-xxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <ImageView fitHeight="39.0" fitWidth="27.0" layoutX="694.0" layoutY="16.0" onMouseClicked="#minimizeAction" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Scenes/minimize-window-xxl.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <ImageView fx:id="proPic" fitHeight="142.0" fitWidth="121.0" layoutX="623.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</AnchorPane>

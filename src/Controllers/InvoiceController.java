@@ -40,6 +40,8 @@ public class InvoiceController {
     POSController pos = new POSController();
     double netPrice = pos.finalNetPayablePrice;
 
+
+
     @FXML
     private void initialize() throws SQLException, ClassNotFoundException, IOException {
 
@@ -59,6 +61,7 @@ public class InvoiceController {
         this.netPrice = netPrice;
         this.items = pos.itemList;
         this.payment = payment;
+
     }
 
     @FXML

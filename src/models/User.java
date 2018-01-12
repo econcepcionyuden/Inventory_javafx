@@ -3,6 +3,8 @@ package models;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.sql.Blob;
+
 /**
  * Created by jaliya on 12/5/17.
  */
@@ -15,6 +17,7 @@ public class User {
     private StringProperty password;
     private StringProperty contactNo;
     private StringProperty address;
+    private StringProperty picLocation;
 
 
     public User() {
@@ -25,6 +28,19 @@ public class User {
         this.password = new SimpleStringProperty();
         this.contactNo = new SimpleStringProperty();
         this.address = new SimpleStringProperty();
+        this.picLocation = new SimpleStringProperty();
+    }
+
+    public String getPicLocation() {
+        return picLocation.get();
+    }
+
+    public StringProperty picLocationProperty() {
+        return picLocation;
+    }
+
+    public void setPicLocation(String picLocation) {
+        this.picLocation.set(picLocation);
     }
 
     public String getContactNo() {

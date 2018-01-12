@@ -26,11 +26,21 @@
                 <Insets />
             </VBox.margin>
             <children>
-                <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="22.0" prefWidth="1028.0">
+                <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="1028.0">
                     <children>
+                  <Label fx:id="userName" alignment="CENTER_RIGHT" prefHeight="23.0" prefWidth="119.0">
+                     <HBox.margin>
+                        <Insets right="5.0" top="20.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ImageView fx:id="proPic" fitHeight="34.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="5.0" top="9.0" />
+                     </HBox.margin>
+                  </ImageView>
                         <MenuButton fx:id="menuButton" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="210.0">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Profile" />
+                                <MenuItem fx:id="profile" mnemonicParsing="false" onAction="#handleNavigation" text="Profile" />
                                 <MenuItem fx:id="logoutItem" mnemonicParsing="false" onAction="#logoutAction" text="Logout" />
                             </items>
                      <HBox.margin>
@@ -65,7 +75,7 @@
         </HBox>
         <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="760.0" VBox.vgrow="ALWAYS">
             <children>
-                <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="471.0" prefWidth="240.0" styleClass="product-vbox" HBox.hgrow="NEVER">
+                <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="240.0" styleClass="product-vbox" HBox.hgrow="NEVER">
                     <children>
                         <TextField fx:id="searchField" layoutX="14.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#searchProduct" prefHeight="35.0" prefWidth="200.0" promptText="Search Product" styleClass="search-field">
                             <VBox.margin>
